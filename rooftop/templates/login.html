@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container login">
+    {% if form.errors %}
+    <div id="status" class="alert alert-danger"><p>Your username and/or password is wrong. Please try again.</p></div>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <center><img alt="LOGIN" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
+            <form id="login" method="post" class="form-signin" role="form" action="/">
+                {% csrf_token %}                
+                <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
+                <input type="password" class="form-control" placeholder="Password" required id="id_password" name="password">
+
+                <input type="hidden" name="next" value="{{ next }}" />
+                <button id="connect" class="btn btn-primary btn-block" type="submit" value="login">Login</button>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+</div>
+{% endblock %}

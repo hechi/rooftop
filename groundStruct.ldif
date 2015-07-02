@@ -1,0 +1,20 @@
+# ldapadd -x -W -D "cn=admin,dc=example,dc=de" -f groundStruct.ldif
+#
+# ou=groups,dc=example,dc=de
+dn: ou=groups,dc=example,dc=de
+objectclass: organizationalUnit
+objectclass: top
+ou: groups
+
+# ou=systemusers,dc=example,dc=de
+dn: ou=systemusers,dc=example,dc=de
+objectclass: organizationalUnit
+objectclass: top
+ou: systemusers
+
+# ou=users,dc=example,dc=de
+dn: ou=users,dc=example,dc=de
+objectclass: organizationalUnit
+objectclass: top
+ou: users
+
