@@ -8,7 +8,8 @@
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <center><img alt="LOGIN" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
+            <center><img alt="LOGIN" height="100" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
+            <br>
             <form id="login" method="post" class="form-signin" role="form" action="/">
                 {% csrf_token %}                
                 <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
