@@ -25,11 +25,18 @@ with open(os.path.join(BASE_DIR,'secret_key.txt')) as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
-
-TEMPLATE_DIRS = (
-        os.path.join(BASE_DIR, 'rooftop/templates'),
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS' : ['rooftop/templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ],
+        },
+    },
+]
 
 ALLOWED_HOSTS = ["localhost","127.0.0.1"]
 
@@ -151,4 +158,3 @@ STATIC_ROOT = 'staticfiles/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'rooftop/static'),
 )
-
