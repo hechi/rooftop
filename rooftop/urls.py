@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^$',custom_login, {'template_name': 'login.html'}),
     url(r'^start/$',login_required(start)),
     url(r'^profile/$',login_required(UserprofileView.as_view())),
-    url(r'^profile/password$',login_required(UserprofilePasswordChange.as_view())),
+    url(r'^profile/password/$',login_required(UserprofilePasswordChange.as_view())),
     url(r'^add/user/$',login_required(AddUserView.as_view())),
     url(r'^add/group/$',login_required(AddGroupView.as_view())),
     url(r'^manage/$',login_required(AdminView.as_view())),
