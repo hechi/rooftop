@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^start/$',login_required(start)),
     url(r'^profile/$',login_required(UserprofileView.as_view())),
     url(r'^profile/password$',login_required(UserprofilePasswordChange.as_view())),
-    url(r'^adduser/$',login_required(AddUserView.as_view())),
-    url(r'^addgroup/$',login_required(AddGroupView.as_view())),
+    url(r'^add/user/$',login_required(AddUserView.as_view())),
+    url(r'^add/group/$',login_required(AddGroupView.as_view())),
     url(r'^logout/$', auth_views.logout,{'next_page': '/'}),
 ]

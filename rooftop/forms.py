@@ -15,4 +15,4 @@ class AddUserForm(forms.Form):
 
 class AddGroupForm(forms.Form):
     groupname = forms.CharField(label='Groupname')
-    description = forms.CharField(label='description')
+    description = forms.CharField(label='Description')
