@@ -42,14 +42,6 @@ def getHeaderParam(request):
     param = {}
     groups=[]
     param['displayname'] = request.user.first_name
-
-    profile={}
-    profile['external']=False
-    profile['icon']='fa-user'
-    profile['link']="/userprofile/"
-    profile['name']="Profil"
-
-    groups.append(profile)
     param['groups'] = groups
     return param
 

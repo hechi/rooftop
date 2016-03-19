@@ -7,6 +7,8 @@
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-left">
+            <li class="navlinks"><a href="/profile/"><i class="fa fa-user"></i>&nbsp; Profile</a></li>
+
             {% for group in groups %}
             {% if group.external %}
             <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
