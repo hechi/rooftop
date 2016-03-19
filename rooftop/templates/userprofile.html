@@ -6,17 +6,17 @@
     {% endif %}
     {% if statusError %}
     <div id="status" class="alert alert-danger">{{ statusError }}</div>
-    {% endif %}  
+    {% endif %}
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
             <center><h2>Your Profile</h2></center>
-            <form action="." method="post">{% csrf_token %}
-                <input type="hidden" name="passwdForm"></input>
-                <div class="input-group"><span class="input-group-addon">old password</span>{{passwd.old_password | add_class:"form-control"}}</div>
-                <div class="input-group"><span class="input-group-addon">new password</span>{{passwd.new_password1 | add_class:"form-control"}}</div>  
-                <div class="input-group"><span class="input-group-addon">repeat password</span>{{passwd.new_password2 | add_class:"form-control"}}</div>  
-                <button type="submit" name="change" class="btn btn-success btn-group-justified">change</button>
+            <form action="." method="post">
+                {% csrf_token %}
+                {% for field in form %}
+                  <div class="input-group"><span class="input-group-addon">{{field.label}}</span>{{field | add_class:"form-control"}}</div>
+                {% endfor %}
+                <input type="submit" value="Submit" class="btn btn-success btn-group-justified" />
             </form>
         </div>
         <div class="col-md-4"></div>

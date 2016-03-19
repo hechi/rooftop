@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
+from django.contrib.auth.decorators import login_required
 from rooftop.views import *
 
 urlpatterns = [
@@ -11,6 +12,6 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^$',auth_views.login, {'template_name': 'login.html'}),
     url(r'^start/$',start),
-    url(r'^userprofile/$',userprofile),
+    url(r'^userprofile/$',login_required(userprofileView.as_view())),
     url(r'^logout/$', auth_views.logout,{'next_page': '/'}),
 ]
