@@ -1,24 +1,24 @@
 # -*- coding: utf-8 -*-
 class LdapUser:
-    def __init__(self,vorname,nachname,uid,mail,password=""):
-        self.vorname=vorname
-        self.nachname=nachname
+    def __init__(self,firstname,lastname,uid,mail,password=""):
+        self.firstname=firstname
+        self.lastname=lastname
         self.uid=uid
         self.mail=mail
-        self.displayname= str(vorname)+" "+ str(nachname)
+        self.displayname= str(firstname)+" "+ str(lastname)
         self.password=password
 
-    def getVorname(self):
-        if self.vorname!=None and self.vorname != "" and self.vorname.strip():
-            return str( (self.vorname) )
+    def getFirstname(self):
+        if self.firstname!=None and self.firstname != "" and self.firstname.strip():
+            return str( (self.firstname) )
         else:
-            return str( ("Vorname") )
+            return str( ("Firstname") )
 
-    def getNachname(self):
-        if self.nachname!=None and self.nachname != "" and self.nachname.strip():
-            return str( (self.nachname) )
+    def getLastname(self):
+        if self.lastname!=None and self.lastname != "" and self.lastname.strip():
+            return str( (self.lastname) )
         else:
-            return str( ("Nachname") )
+            return str( ("Lastname") )
 
     def getUid(self):
         return str(self.uid)
@@ -42,9 +42,9 @@ class LdapUser:
         return str(self.getUid().replace('.','_'))
 
     def display(self):
-        print("==== "+ (self.vorname)+" "+ (self.nachname)+" ====")
-        print("Vorname: "+ (self.vorname))
-        print("Nachname: "+ (self.nachname))
+        print("==== "+ (self.firstname)+" "+ (self.lastname)+" ====")
+        print("Firstname: "+ (self.firstname))
+        print("Lastname: "+ (self.lastname))
         print("Username: "+ (self.uid))
         print("Email: "+ (self.mail))
         print("displayname: "+ (self.displayname))
