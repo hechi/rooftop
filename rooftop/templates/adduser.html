@@ -8,13 +8,15 @@
     <div id="status" class="alert alert-danger">{{ statusError }}</div>
     {% endif %}
     <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
+        <div class="col-md-6 col-md-offset-3">
             <center><h2>Add user</h2></center>
             <form action="." method="post">
                 {% csrf_token %}
                 {% for field in form %}
-                  <div class="input-group"><span class="input-group-addon">{{field.label}}</span>{{field | add_class:"form-control"}}</div>
+                <div class="row">
+                    <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                    <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
+                </div>
                 {% endfor %}
                 <input type="submit" value="Submit" class="btn btn-success btn-group-justified" />
             </form>
