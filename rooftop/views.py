@@ -80,13 +80,13 @@ class UserprofileView(View):
 
 class AddUserView(View):
     form_class = AddUserForm
-    template_name = 'adduser.html'
+    template_name = 'add.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         param={}
         param=getHeaderParam(self.request)
-        param['title']='Add User'
+        param['formtitle']='Add User'
         param['form']=form
         return render(request, self.template_name, param)
 
@@ -110,13 +110,13 @@ class AddUserView(View):
 
 class AddGroupView(View):
     form_class = AddGroupForm
-    template_name = 'adduser.html'
+    template_name = 'add.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         param={}
         param=getHeaderParam(self.request)
-        param['title']='Add Group'
+        param['formtitle']='Add Group'
         param['form']=form
         return render(request, self.template_name, param)
 
