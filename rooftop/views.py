@@ -20,14 +20,14 @@ def start(request):
     template = get_template('start.html')
     param = getHeaderParam(request)
 
-    context = RequestContext(request,param)
-    html = template.render(context) 
+    context = Context(param)
+    html = template.render(context)
     return HttpResponse(html)
 
 def getHeaderParam(request):
     param = {}
     groups=[]
-    param['displayname'] = encMsg(request.user.first_name)
+    param['displayname'] = request.user.first_name
 
     profile={}
     profile['external']=False
@@ -37,22 +37,21 @@ def getHeaderParam(request):
 
     groups.append(profile)
     param['groups'] = groups
-    
     return param
 
 @login_required
 def userprofile(request):
     template = get_template('userprofile.html')
     param = getHeaderParam(request)
-    
+
     if request.method == 'POST' and 'passwdForm' in request.POST:
         user = request.user
-        
+
         # Open a connection
         l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
 
         # The dn of our new entry/object
-        dn="uid="+user.username+","+settings.AUTH_LDAP_BASE_USER_DN       
+        dn="uid="+user.username+","+settings.AUTH_LDAP_BASE_USER_DN
 
         if 'old_password' in request.POST and 'new_password1' in request.POST and 'new_password2' in request.POST:
             try:
@@ -61,23 +60,23 @@ def userprofile(request):
                 if request.POST['new_password1'] == request.POST['new_password2']:
                     l.passwd_s(dn,request.POST['old_password'],request.POST['new_password1'])
                     user.set_password(request.POST['new_password1'])
-                    param['status']=encMsg("thanks, password has been changed")
+                    param['status']=("thanks, password has been changed")
                     user.save()
                 else:
-                    param['statusError']=encMsg("password has NOT been CHANGED, new password does not match")
+                    param['statusError']=("password has NOT been CHANGED, new password does not match")
             except:
-                param['statusError']=encMsg("wrong password, please try again")
+                param['statusError']=("wrong password, please try again")
         else:
-            param['statusError']=encMsg("password has NOT been CHANGED, wrong input")
+            param['statusError']=("password has NOT been CHANGED, wrong input")
 
         # Its nice to the server to disconnect and free resources when done
         l.unbind_s()
 
     passwdForm=PasswordChangeForm(user=request.user)
     param['passwd'] = passwdForm
-    
+
     context = RequestContext(request,param)
-    html = template.render(context)     
+    html = template.render(context)
     return HttpResponse(html)
 
 def encMsg(msg):
