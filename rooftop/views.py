@@ -8,6 +8,7 @@ from django.template.response import TemplateResponse
 from django.views.generic import View
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.views import login
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
 )
@@ -22,6 +23,11 @@ from .models import LdapUser
 
 import sys, traceback
 
+def custom_login(request, **kwargs):
+    if request.user.is_authenticated():
+        return HttpResponseRedirect('start/')
+    else:
+        return login(request,**kwargs)
 
 @login_required
 def start(request):
