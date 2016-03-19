@@ -1,14 +1,19 @@
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="/">
             <img alt="Brand" height="25" src="{{ STATIC_PREFIX }}img/rooftop_small.png">
             </a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav navbar-left">
-            <li class="navlinks"><a href="/profile/"><i class="fa fa-user"></i>&nbsp; Profile</a></li>
-
+            <li class="dropdown">
+              <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i>&nbsp; Profile &nbsp;<i class="fa fa-caret-down"></i></a>
+              <ul class="dropdown-menu">
+                <li><a href="/profile/">View Profile</a></li>
+                <li><a href="/profile/password">Change Password</a></li>
+              </ul>
+            </li>
             {% for group in groups %}
             {% if group.external %}
             <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>

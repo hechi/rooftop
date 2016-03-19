@@ -46,8 +46,16 @@ def getHeaderParam(request):
     return param
 
 class UserprofileView(View):
+    template_name = 'userprofileview.html'
+
+    def get(self, request, *args, **kwargs):
+        param = {}
+        param=getHeaderParam(self.request)
+        return render(request, self.template_name, param)
+
+class UserprofilePasswordChange(View):
     form_class = UserprofileForm
-    template_name = 'userprofile.html'
+    template_name = 'userpasswordchange.html'
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
