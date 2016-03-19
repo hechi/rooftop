@@ -48,6 +48,7 @@ AUTH_LDAP_BIND_DN = "cn=admin,dc=example,dc=de"
 AUTH_LDAP_BASE_USER_DN = "ou=users,dc=example,dc=de"
 AUTH_LDAP_BASE_GROUP_DN = "ou=groups,dc=example,dc=de"
 AUTH_LDAP_BIND_PASSWORD = "root"
+AUTH_LDAP_ADMIN_GROUP = "admin"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 with open(os.path.join(BASE_DIR,'ldap_passwd.txt')) as f:

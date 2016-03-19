@@ -1,7 +1,14 @@
 # -*- coding: utf-8 -*-
 from django import forms
 
-class userprofileForm(forms.Form):
+class UserprofileForm(forms.Form):
     oldPassword = forms.CharField(label='Old Password',widget=forms.PasswordInput())
     newPassword = forms.CharField(label='New Password',widget=forms.PasswordInput())
     confirmPassword = forms.CharField(label='Confirm Password',widget=forms.PasswordInput())
+
+class AddUserForm(forms.Form):
+    username = forms.CharField(label='Username')
+    firstname = forms.CharField(label='Firstname')
+    lastname = forms.CharField(label='Lastname')
+    email = forms.CharField(label='Email')
+    password = forms.CharField(label='Password',widget=forms.PasswordInput())
