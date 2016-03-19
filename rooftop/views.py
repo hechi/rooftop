@@ -89,6 +89,7 @@ class AddUserView(View):
     template_name = 'add.html'
 
     def get(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
         form = self.form_class()
         param={}
         param=getHeaderParam(self.request)
@@ -97,6 +98,7 @@ class AddUserView(View):
         return render(request, self.template_name, param)
 
     def post(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
         form = self.form_class(request.POST)
         check=False
         param={}
@@ -119,6 +121,7 @@ class AddGroupView(View):
     template_name = 'add.html'
 
     def get(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
         form = self.form_class()
         param={}
         param=getHeaderParam(self.request)
@@ -127,6 +130,7 @@ class AddGroupView(View):
         return render(request, self.template_name, param)
 
     def post(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
         form = self.form_class(request.POST)
         check=False
         param={}
@@ -140,6 +144,17 @@ class AddGroupView(View):
             check=addGroupToLdap(groupname,description,username)
 
         return HttpResponse(json.dumps(check), content_type="application/json")
+
+class AdminView(View):
+    template_name = 'adminpage.html'
+
+    def get(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
+        param={}
+        param=getHeaderParam(self.request)
+        param['ldapUsers'] = getAllUserInformations()
+        param['ldapGroups'] = getAllGroups()
+        return render(request, self.template_name, param)
 
 def addUserToLdap(user):
     check = False
@@ -242,7 +257,7 @@ def isUserInGroup(username,groupname):
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         # find user in group
                         for u in result_data[0][1]['member']:
-                            print(str(u).split("uid=")[1].split(",")[0])
+                            #print(str(u).split("uid=")[1].split(",")[0])
                             if str(u).split("uid=")[1].split(",")[0] == username:
                                 isInGroup=True
             l.unbind_s()
@@ -276,3 +291,115 @@ def changePassword(request,oldPassword,newPassword):
     print(retValue)
     l.unbind_s()
     return retValue
+
+def getAllUsers():
+    l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+    searchScope = ldap.SCOPE_SUBTREE
+    retrieveAttributes = None
+    searchFilter = "(objectClass=posixAccount)"
+    users=[]
+
+    try:
+            ldap_result_id = l.search(settings.AUTH_LDAP_BASE_USER_DN, searchScope, searchFilter, retrieveAttributes)
+            result_set = []
+            res = {}
+            while 1:
+                result_type, result_data = l.result(ldap_result_id, 0)
+                #print result_data
+                if (result_data == []):
+                    break
+                else:
+                    #print "check"
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        for entry in result_data:
+                                try:
+                                    uid=entry[1]['uid'][0]
+                                except:
+                                    uid="ERROR"
+                                try:
+                                    cn=entry[1]['cn'][0]
+                                except:
+                                    cn="ERROR"
+                                try:
+                                    sn=entry[1]['sn'][0]
+                                except:
+                                    sn="ERROR"
+                                try:
+                                    mail=entry[1]['mail'][0]
+                                except:
+                                    mail="ERROR"
+                                user=LdapUser(cn,sn,uid,mail)
+                                #user.display()
+                                users.append(user)
+            l.unbind_s()
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+    return users
+
+def getAllGroups():
+    #print "return all groups from ldap"
+    l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+    searchScope = ldap.SCOPE_SUBTREE
+    retrieveAttributes = None
+    searchFilter = "(objectClass=groupOfNames)"
+    groups=[]
+
+    try:
+            ldap_result_id = l.search(settings.AUTH_LDAP_BASE_GROUP_DN, searchScope, searchFilter, retrieveAttributes)
+            result_set = []
+            res = {}
+            while 1:
+                result_type, result_data = l.result(ldap_result_id, 0)
+                #print result_data
+                if (result_data == []):
+                    break
+                else:
+                    #print "check"
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        for entry in result_data:
+                                cn=entry[1]['cn'][0]
+                                try:
+                                    description=entry[1]['description'][0]
+                                except:
+                                    description="None"
+                                member=[]
+                                for mem in entry[1]['member']:
+                                    member.append(str(mem.split(str("uid=").encode('utf-8'))[1].split(str(",").encode('utf-8'))[0]).encode('utf-8'))
+
+                                group={}
+                                group['cn']=str(cn)
+                                group['cnDisplay']=str(cn).replace(" ","_").replace(".","")
+                                group['member']=member
+                                group['description']=description
+                                #print group
+                                groups.append(group)
+            l.unbind_s()
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+    return groups
+
+def getUsersOfGroup(groupname):
+    #print "return users of given group"
+    groups=getAllGroups()
+    for group in groups:
+        if group['cn']==groupname:
+            return group['member']
+
+def getGroupsOfUser(username):
+    #print "return all groups where user is memberof"
+    groups=getAllGroups()
+    listOfGroups=[]
+    for group in groups:
+        if username in group['member']:
+            listOfGroups.append(group['cn'])
+    return listOfGroups
+
+def getAllUserInformations():
+    users = getAllUsers()
+    info=[]
+    for u in users:
+        userInfos={}
+        userInfos['user']=u
+        userInfos['groups']=getGroupsOfUser(u.getUid())
+        info.append(userInfos)
+    return info
