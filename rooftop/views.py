@@ -111,44 +111,60 @@ def addUserToLdap(user):
     check = False
     try:
         # Open a connection
-        l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+        print("--------")
+        con = ldap.initialize(settings.AUTH_LDAP_SERVER_URI,trace_level=2)
+        print("--------")
 
         # Bind/authenticate with a user with apropriate rights to add objects
-        l.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
-
+        con.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+        print(con)
         # The dn of our new entry/object
         dn="uid="+user.getUid()+","+str(settings.AUTH_LDAP_BASE_USER_DN)
 
         # A dict to help build the "body" of the object
         # TODO: clean this
         attrs = {}
-        attrs['objectclass'] = [str('inetOrgPerson'),str('top'),str('person'),str('shadowAccount'),str('posixAccount')]
-        attrs['cn'] = user.getVorname()
-        attrs['displayname'] = user.getDisplayname()
-        attrs['mail'] = user.getMail()
-        attrs['sn'] = user.getNachname()
-        attrs['uid'] = user.getUid()
-        attrs['userpassword'] = lsm.encrypt(user.getPassword())
+        attrs['objectclass'] = [str('inetOrgPerson').encode('utf-8'),str('top').encode('utf-8'),str('person').encode('utf-8'),str('shadowAccount').encode('utf-8'),str('posixAccount').encode('utf-8')]
+        attrs['cn'] = [str(user.getVorname()).encode('utf-8')]
+        attrs['displayname'] = [str(user.getDisplayname()).encode('utf-8')]
+        attrs['mail'] = [str(user.getMail()).encode('utf-8')]
+        attrs['sn'] = [str(user.getNachname()).encode('utf-8')]
+        attrs['uid'] = [str(user.getUid()).encode('utf-8')]
+        attrs['userpassword'] = [str(lsm.encrypt(user.getPassword())).encode('utf-8')]
 
         # necessary for posixAccount
-        attrs['gidNumber']=str(1000)
-        attrs['homeDirectory']=str(str('/home/').encode('utf-8'))+str(user.getUid())
+        attrs['gidNumber']=[str(1000).encode('utf-8')]
+        attrs['homeDirectory']=[str('/home/').encode('utf-8')+str(user.getUid()).encode('utf-8')]
         # TODO generate uniq uidNumber
         # TODO check if its uniq
-        attrs['uidNumber']=str(1000)
+        attrs['uidNumber']=[str(1000).encode('utf-8')]
         print(attrs)
         # Convert our dict to nice syntax for the add-function using modlist-module
         ldif = modlist.addModlist(attrs)
 
         # Do the actual synchronous add-operation to the ldapserver
-        print(dn)
-        print(ldif)
-        l.add_s(dn,ldif)
-
+        print('add_s')
+        print(type(dn))
+        print(type(ldif))
+        con.add_s(dn,ldif)
+        #con.add_s(dn,[
+        #("objectclass",[b"inetOrgPerson"]),
+        #("objectclass",["inetOrgPerson","top","person","shadowAccount","posixAccount"]),
+        #("cn",[b"abasdf"]),
+        #("displayname",[b"Hans Juergen"]),
+        #("mail",[b"test@test.omc"]),
+        #("sn",[b"lastname"]),
+        #("uid",[b"hans"]),
+        #("userpassword",[b"{MD5}8qD/6D7I1E8r5LYksPR93g=="]),
+        #("gidNumber",["1000"]),
+        #("homeDirectory",["/home/hans"]),
+        #("uidNumber",["1000"]),
+        #])
         # Its nice to the server to disconnect and free resources when done
-        l.unbind_s()
+        con.unbind_s()
         check = True
     except ldap.LDAPError:
+    #except Exception:
         traceback.print_exc(file=sys.stdout)
     return check
 
