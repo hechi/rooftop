@@ -16,7 +16,7 @@ import json
 import ldap
 import ldap.modlist as modlist
 from passlib.hash import ldap_md5 as lsm
-from .forms import UserprofileForm, AddUserForm
+from .forms import UserprofileForm, AddUserForm, AddGroupForm
 
 from .models import LdapUser
 
@@ -86,6 +86,7 @@ class AddUserView(View):
         form = self.form_class()
         param={}
         param=getHeaderParam(self.request)
+        param['title']='Add User'
         param['form']=form
         return render(request, self.template_name, param)
 
@@ -107,17 +108,41 @@ class AddUserView(View):
 
         return HttpResponse(json.dumps(check), content_type="application/json")
 
+class AddGroupView(View):
+    form_class = AddGroupForm
+    template_name = 'adduser.html'
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class()
+        param={}
+        param=getHeaderParam(self.request)
+        param['title']='Add Group'
+        param['form']=form
+        return render(request, self.template_name, param)
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+        check=False
+        param={}
+        param=getHeaderParam(self.request)
+        param['form']=form
+        if form.is_valid() and isUserInGroup(request.user.username,settings.AUTH_LDAP_ADMIN_GROUP):
+            # <process form cleaned data>
+            groupname = form['groupname'].value()
+            description = form['description'].value()
+            username = request.user.username
+            check=addGroupToLdap(groupname,description,username)
+
+        return HttpResponse(json.dumps(check), content_type="application/json")
+
 def addUserToLdap(user):
     check = False
     try:
         # Open a connection
-        print("--------")
-        con = ldap.initialize(settings.AUTH_LDAP_SERVER_URI,trace_level=2)
-        print("--------")
+        con = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
 
         # Bind/authenticate with a user with apropriate rights to add objects
         con.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
-        print(con)
         # The dn of our new entry/object
         dn="uid="+user.getUid()+","+str(settings.AUTH_LDAP_BASE_USER_DN)
 
@@ -147,19 +172,7 @@ def addUserToLdap(user):
         print(type(dn))
         print(type(ldif))
         con.add_s(dn,ldif)
-        #con.add_s(dn,[
-        #("objectclass",[b"inetOrgPerson"]),
-        #("objectclass",["inetOrgPerson","top","person","shadowAccount","posixAccount"]),
-        #("cn",[b"abasdf"]),
-        #("displayname",[b"Hans Juergen"]),
-        #("mail",[b"test@test.omc"]),
-        #("sn",[b"lastname"]),
-        #("uid",[b"hans"]),
-        #("userpassword",[b"{MD5}8qD/6D7I1E8r5LYksPR93g=="]),
-        #("gidNumber",["1000"]),
-        #("homeDirectory",["/home/hans"]),
-        #("uidNumber",["1000"]),
-        #])
+
         # Its nice to the server to disconnect and free resources when done
         con.unbind_s()
         check = True
@@ -168,6 +181,39 @@ def addUserToLdap(user):
         traceback.print_exc(file=sys.stdout)
     return check
 
+def addGroupToLdap(groupname,description,username):
+    check = False
+    try:
+        # Open a connection
+        l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+
+        # Bind/authenticate with a user with apropriate rights to add objects
+        l.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+
+        # The dn of our new entry/object
+        dn="cn="+groupname+","+str(settings.AUTH_LDAP_BASE_GROUP_DN)
+
+        member="uid="+username+","+str(settings.AUTH_LDAP_BASE_USER_DN)
+
+        # A dict to help build the "body" of the object
+        attrs = {}
+        attrs['objectclass'] = [str('groupOfNames').encode('utf-8')]
+        attrs['cn'] = str(groupname).encode('utf-8')
+        attrs['description'] = str(description).encode('utf-8')
+        attrs['member']=[str(member).encode('utf-8')]
+        attrs['owner']=[str(member).encode('utf-8')]
+        # Convert our dict to nice syntax for the add-function using modlist-module
+        ldif = modlist.addModlist(attrs)
+
+        # Do the actual synchronous add-operation to the ldapserver
+        l.add_s(dn,ldif)
+
+        # Its nice to the server to disconnect and free resources when done
+        l.unbind_s()
+        check = True
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+    return check
 
 def isUserInGroup(username,groupname):
     l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
