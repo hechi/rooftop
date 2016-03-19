@@ -9,9 +9,9 @@
           <ul class="nav navbar-nav navbar-left">
             {% for group in groups %}
             {% if group.external %}
-            <li class="navlinks"><a target="_blank" href="{{group.link}}"><span class="glyphicon {{group.icon}}"></span> {{group.name}}</a></li>
+            <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
             {% else %} 
-            <li class="navlinks"><a href="{{group.link}}"><span class="glyphicon {{group.icon}}"></span> {{group.name}}</a></li>
+            <li class="navlinks"><a href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
             {% endif %}
             {% endfor %}
             <li class="divider"></li>
@@ -19,7 +19,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
               {% if displayname %}
-              <p class="navbar-text">Signed in as {{displayname}} <a class="navbar-link" href="/logout"><span class="glyphicon glyphicon-off" aria-hidden="true"></span></a></p>        
+              <p class="navbar-text">Signed in as {{displayname}} &nbsp;<a class="navbar-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></p>        
               {% endif %}
           </li>
       </ul>

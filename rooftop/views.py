@@ -45,7 +45,7 @@ def getHeaderParam(request):
 
     profile={}
     profile['external']=False
-    profile['icon']='glyphicon-user'
+    profile['icon']='fa-user'
     profile['link']="/userprofile/"
     profile['name']="Profil"
 
