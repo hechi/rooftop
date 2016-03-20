@@ -53,12 +53,13 @@ class UserprofileView(View):
         param=getHeaderParam(self.request)
 
         userfields=dict([])
+        userfields['EMail']=request.user.email
         userfields['Username']=request.user.username
         userfields['Full Name']=request.user.first_name + " " + request.user.last_name
 
         param['userfields']=userfields
         param['ldapGroups']=getGroupsOfUser(request.user.username)
-        #print(param)
+
         return render(request, self.template_name, param)
 
 class UserprofilePasswordChange(View):

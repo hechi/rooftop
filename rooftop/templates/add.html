@@ -14,13 +14,13 @@
     </div>
     {% endif %}
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <center><h2>{{formtitle}}</h2></center>
+        <div class="col-md-8 col-md-offset-2 jumbotron text-center">
+            <h2>{{formtitle}}</h2>
             <form action="." method="post">
                 {% csrf_token %}
                 {% for field in form %}
                 <div class="row">
-                    <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                    <div class="col-xs-4 text-right"><label class="form-control-label">{{field.label}}</label></div>
                     <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
                 </div>
                 {% endfor %}

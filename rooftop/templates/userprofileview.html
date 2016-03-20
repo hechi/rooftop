@@ -2,21 +2,21 @@
 {% load widget_tweaks %}
 {% block content %}
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
-            <center><h2>Your Profile</h2></center>
-
+        <div class="col-md-8 col-md-offset-2 jumbotron text-center">
+            <h2>Your Profile</h2>
             {% if userfields or ldapGroups %}
-            <table class="table table-hover">
+            <table class="table table-condensed">
             {% for key,value in userfields.items %}
             <tr>
-                <th><center>{{ key }}</center></td>
-                <td><center>{{ value }}</center></td>
+                <th class="text-center active">{{ key }}</td>
+                <td class="text-center active">{{ value }}</td>
             </tr>
             {% endfor %}
+            <tr><td></td></tr>
             {% for g in ldapGroups %}
             <tr>
-                <th>{% if forloop.first %}<center>Groups</center>{% endif %}</th>
-                <td><center>{{ g }}</center></td>
+                <th class="text-center active">{% if forloop.first %}Groups{% endif %}</th>
+                <td class="text-center active">{{ g }}</td>
             </tr>
             {% endfor %}
             </table>
