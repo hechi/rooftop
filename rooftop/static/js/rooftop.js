@@ -59,7 +59,7 @@ function innlineEdit(orig,callback){
 
 
 $(document).ready(function () {
-
+    $('select').searchableSelect();
     var panels = $('.info');
     var panelsButton = $('.dropdown-info');
     panels.hide();

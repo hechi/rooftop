@@ -89,11 +89,9 @@
                                                         {% for user in g.member %}
                                                         <li>{{user}} <span class="delGroupUser fa fa-remove" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
                                                         {% endfor %}
-                                                        <span class="edit-group" groupid="{{g.cn}}" type="addMember">
-                                                            <li><span class="fa fa-plus" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
-                                                        </span>
                                                     </ul>
                                                     <select class="form-control hidden">
+                                                       <option value="">select user to add</option>
                                                         {% for u in ldapUsers %}
                                                         <option value="{{u.user.getUid}}">{{u.user.getDisplayname}} ({{u.user.getUid}})</option>
                                                         {% endfor %}
