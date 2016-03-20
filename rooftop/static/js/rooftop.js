@@ -1,3 +1,63 @@
+function innlineEdit(orig,callback){
+    var type = $(orig).attr('type');
+    if(type == "addMember"){
+        var userlist=$(orig).parent().parent().find('select');
+        var ulList = $(orig).parent().parent().find('ul');
+        var loader = $(orig).parent().parent().find('div').css("class","loader");
+        //console.log("show select")
+        //console.log(userlist)
+
+        // remove all users which are already in the list
+        $(ulList).children().each(function(index1,data){
+            $(userlist).children().each(function(index2,data2){
+                //console.log($(data).text().trim()+"=="+$(data2).text().trim())
+                if($(data).text().trim()==$(data2).val().trim()){
+                            $(data2).remove();
+                            //FIXME: What is if i delete a user and want to add it again in the same pageload
+                            //       Idea: show all first and hide all again
+                            //$(data2).hide();
+                }
+            });
+        });
+
+        if($(userlist).children().size()>0){
+            $(userlist).removeClass("hidden");
+            $(userlist).show();
+            $(userlist).click(function(){
+                $(loader).removeClass("hidden");
+                $(loader).show();
+                $(userlist).hide();
+                /*
+                addUserToGroup($(orig).attr("groupid"),userlist.val(),function(result){
+                    //console.log(result)
+                    //console.log($(orig).parent().parent().find('ul'))
+                    if(result){
+                        var check=false;
+                        //console.log(ulList)
+                        $(ulList).children().each(function(elem,data){
+                            if($(data).text().trim()==userlist.val()){
+                                check=true;
+                            }
+                        });
+                        if(check==false){
+                            ulList.append($('<li>'+userlist.val()+' <span class="glyphicon glyphicon-ok"></span></li>'))
+                        }
+                        $(loader).hide();
+                    }
+                });
+                */
+            });
+        }else{
+            var msg=$("<p>Alle User sind in dieser Gruppe vorhanden</p>");
+            $(ulList).parent().append(msg);
+            msg.fadeOut(4000,function(){
+                msg.remove();
+            })
+        }
+    }
+}
+
+
 $(document).ready(function () {
 
     var panels = $('.info');
@@ -77,5 +137,19 @@ $(document).ready(function () {
           //TODO clear fields
             //clearGroupFields();
         });
+    });
+
+    $('.edit-group').click(function(){
+        var elem = $(this);
+        innlineEdit($(elem),function(value){
+          /*
+            param = {}
+            param['modGroupname']=$(elem).attr("groupid");
+            param['modDescription']=value;
+            sendPostQuery("modGroup/",param,function(data){
+                elem.append($('<i class="glyphicon glyphicon-ok">'))
+            });
+          */
+        })
     });
 });
