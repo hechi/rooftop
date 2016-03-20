@@ -20,7 +20,7 @@
                                           {% csrf_token %}
                                           {% for field in formGroup %}
                                           <div class="row">
-                                              <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                              <div class="col-xs-4 text-right"><label class="form-control-label">{{field.label}}</label></div>
                                               <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
                                           </div>
                                           {% endfor %}
@@ -131,7 +131,7 @@
                                           {% csrf_token %}
                                           {% for field in formUser %}
                                           <div class="row">
-                                              <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                              <div class="col-xs-4 text-right"><label class="form-control-label">{{field.label}}</label></div>
                                               <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
                                           </div>
                                           {% endfor %}
