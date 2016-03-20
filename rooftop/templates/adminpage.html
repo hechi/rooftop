@@ -32,7 +32,7 @@
                                 <button class="btn btn-sm btn-success" type="submit"
                                 data-toggle="tooltip"
                                 id = "addGroup"
-                                data-original-title="Add Group"><i class="fa fa-ok"></i></button>
+                                data-original-title="Add Group"><i class="fa fa-check"></i></button>
                                 <button class="btn btn-sm btn-danger" type="button"
                                 data-toggle="tooltip"
                                 id = "cancelGroup"
@@ -72,7 +72,7 @@
                                 </div>
                                 <div class=" col-md-9">
                                     <strong>{{g.cn}}</strong><br>
-                                    <table class="table table-user-information">
+                                    <table class="table table-condensed">
                                         <tbody>
                                             <tr>
                                                 <td>Groupname:</td>
@@ -147,7 +147,7 @@
                                 <button class="btn btn-sm btn-success" type="submit"
                                 data-toggle="tooltip"
                                 id = "addUser"
-                                data-original-title="Add Group"><i class="fa fa-ok"></i></button>
+                                data-original-title="Add Group"><i class="fa fa-check"></i></button>
                                 <button class="btn btn-sm btn-danger" type="button"
                                 data-toggle="tooltip"
                                 id = "cancelUser"
@@ -187,19 +187,19 @@
                                 </div>
                                 <div class=" col-md-9">
                                     <strong>{{u.user.getDisplayname}}</strong><br>
-                                    <table class="table-user-information">
+                                    <table class="table table-condensed">
                                         <tbody>
                                             <tr>
                                                 <td>Username:</td>
                                                 <td>{{u.user.getUid}}</td>
                                             </tr>
                                             <tr>
-                                                <td>Vorname:</td>
-                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getVorname}}</span></td>
+                                                <td>Firstname:</td>
+                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getFirstname}}</span></td>
                                             </tr>
                                             <tr>
-                                                <td>Nachname:</td>
-                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getNachname}}</span></td>
+                                                <td>Lastname:</td>
+                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getLastname}}</span></td>
                                             </tr>
                                             <tr>
                                                 <td>Email:</td>
