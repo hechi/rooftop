@@ -388,7 +388,7 @@ def getAllGroups():
 
                                 group={}
                                 group['cn']=cn
-                                group['cnDisplay']=encMsg(cn).replace(" ","_").replace(".","")
+                                group['cnDisplay']=encMsg(cn).replace(" ","_").replace(".","")[:1].upper
                                 group['member']=member
                                 group['description']=description
                                 #print group
