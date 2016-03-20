@@ -372,7 +372,8 @@ def getAllGroups():
                                     description="None"
                                 member=[]
                                 for mem in entry[1]['member']:
-                                    member.append(str(mem.split(str("uid=").encode('utf-8'))[1].split(str(",").encode('utf-8'))[0]).encode('utf-8'))
+                                    #member.append(str(mem.split(str("uid=").encode('utf-8'))[1].split(str(",").encode('utf-8'))[0]).encode('utf-8'))
+                                    member.append(encMsg(mem.split(str("uid=").encode('utf-8'))[1].split(str(",").encode('utf-8'))[0]).encode('utf-8'))
 
                                 group={}
                                 group['cn']=cn
