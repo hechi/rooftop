@@ -173,10 +173,10 @@ def addUserToLdap(user):
         # TODO: clean this
         attrs = {}
         attrs['objectclass'] = [str('inetOrgPerson').encode('utf-8'),str('top').encode('utf-8'),str('person').encode('utf-8'),str('shadowAccount').encode('utf-8'),str('posixAccount').encode('utf-8')]
-        attrs['cn'] = [str(user.getVorname()).encode('utf-8')]
+        attrs['cn'] = [str(user.getFirstname()).encode('utf-8')]
         attrs['displayname'] = [str(user.getDisplayname()).encode('utf-8')]
         attrs['mail'] = [str(user.getMail()).encode('utf-8')]
-        attrs['sn'] = [str(user.getNachname()).encode('utf-8')]
+        attrs['sn'] = [str(user.getLastname()).encode('utf-8')]
         attrs['uid'] = [str(user.getUid()).encode('utf-8')]
         attrs['userpassword'] = [str(lsm.encrypt(user.getPassword())).encode('utf-8')]
 
