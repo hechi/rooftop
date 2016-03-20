@@ -7,10 +7,10 @@
 
             {% if userfields or ldapGroups %}
             <table class="table table-hover">
-            {% for f in userfields %}
+            {% for key,value in userfields.items %}
             <tr>
-                <td>{{ f.key }}</td>
-                <td>{{ f.value }}</td>
+                <th><center>{{ key }}</center></td>
+                <td><center>{{ value }}</center></td>
             </tr>
             {% endfor %}
             {% for g in ldapGroups %}

@@ -51,6 +51,12 @@ class UserprofileView(View):
     def get(self, request, *args, **kwargs):
         param = {}
         param=getHeaderParam(self.request)
+
+        userfields=dict([])
+        userfields['Username']=request.user.username
+        userfields['Full Name']=request.user.first_name + " " + request.user.last_name
+        
+        param['userfields']=userfields
         param['ldapGroups']=getGroupsOfUser(request.user.username)
         #print(param)
         return render(request, self.template_name, param)
