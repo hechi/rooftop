@@ -29,8 +29,36 @@ $(document).ready(function () {
         })
     });
 
-    $("#addUser").click(function(event){
-        addUser();
+    //$("#addUser").click(function(event){
+    //   addUser();
+    //});
+
+    $('form[name=userform]').submit(function(){
+        // Maybe show a loading indicator...
+        $.post($(this).attr('action'), $(this).serialize(), function(res){
+            // Do something with the response `res`
+            // Don't forget to hide the loading indicator!
+            console.log(res);
+            $('.addUser').slideToggle(400,function(){});
+            if(res){
+              location.reload();
+            }
+        });
+        return false; // prevent default action
+    });
+
+    $('form[name=groupform]').submit(function(){
+        // Maybe show a loading indicator...
+        $.post($(this).attr('action'), $(this).serialize(), function(res){
+            // Do something with the response `res`
+            // Don't forget to hide the loading indicator!
+            console.log(res);
+            $('.addGroup').slideToggle(400,function(){});
+            if(res){
+              location.reload();
+            }
+        });
+        return false; // prevent default action
     });
 
     $("#cancelUser").click(function(event){
