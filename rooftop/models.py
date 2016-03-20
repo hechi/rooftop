@@ -5,29 +5,29 @@ class LdapUser:
         self.lastname=lastname
         self.uid=uid
         self.mail=mail
-        self.displayname= str(firstname)+" "+ str(lastname)
+        self.displayname= encMsg(firstname)+" "+ encMsg(lastname)
         self.password=password
 
     def getFirstname(self):
         if self.firstname!=None and self.firstname != "" and self.firstname.strip():
-            return str( (self.firstname) )
+            return encMsg( (self.firstname) )
         else:
-            return str( ("Firstname") )
+            return encMsg( ("Firstname") )
 
     def getLastname(self):
         if self.lastname!=None and self.lastname != "" and self.lastname.strip():
-            return str( (self.lastname) )
+            return encMsg( (self.lastname) )
         else:
-            return str( ("Lastname") )
+            return encMsg( ("Lastname") )
 
     def getUid(self):
-        return str(self.uid)
+        return encMsg(self.uid)
 
     def getMail(self):
         if self.mail!=None and self.mail != "" and self.mail.strip():
-            return str( (self.mail) )
+            return encMsg( (self.mail) )
         else:
-            return str( ("example@domain.com") )
+            return encMsg( ("example@domain.com") )
 
     def getDisplayname(self):
         if self.displayname!=None and self.displayname != "" and self.displayname.strip():
@@ -39,7 +39,7 @@ class LdapUser:
         return str( (self.password) )
 
     def getUidWithoutDots(self):
-        return str(self.getUid().replace('.','_'))
+        return encMsg(self.getUid().replace('.','_'))
 
     def display(self):
         print("==== "+ (self.firstname)+" "+ (self.lastname)+" ====")
@@ -48,3 +48,15 @@ class LdapUser:
         print("Username: "+ (self.uid))
         print("Email: "+ (self.mail))
         print("displayname: "+ (self.displayname))
+
+def encMsg(msg):
+    dec=""
+    try:
+        dec = msg.decode('utf-8')
+    except:
+        try:
+            msgA = unicode(msg.encode('iso-8859-1'),'iso-8859-1')
+            dec = msgA
+        except:
+            dec = "ERROR CAN NOT BE PRINTED"
+    return dec
