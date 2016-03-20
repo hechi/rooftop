@@ -3,7 +3,10 @@
 {% block content %}
 <div class="container login">
     {% if form.errors %}
-    <div id="status" class="alert alert-danger"><p>Your username and/or password is wrong. Please try again.</p></div>
+    <div id="status" class="alert alert-danger">
+        <p>Your username and/or password is wrong. Please try again.</p>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="fa fa-close"></i></a>
+    </div>
     {% endif %}
     <div class="row">
         <div class="col-md-4"></div>
