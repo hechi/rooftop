@@ -407,3 +407,16 @@ def getAllUserInformations():
         userInfos['groups']=getGroupsOfUser(u.getUid())
         info.append(userInfos)
     return info
+
+
+def encMsg(msg):
+    dec=""
+    try:
+        dec = msg.decode('utf-8')
+    except:
+        try:
+            msgA = unicode(msg.encode('iso-8859-1'),'iso-8859-1')
+            dec = msgA
+        except:
+            dec = "ERROR CAN NOT BE PRINTED"
+    return dec
