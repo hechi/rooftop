@@ -32,11 +32,11 @@
                                 <button class="btn btn-sm btn-success" type="submit"
                                 data-toggle="tooltip"
                                 id = "addGroup"
-                                data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
+                                data-original-title="Add Group"><i class="fa fa-ok"></i></button>
                                 <button class="btn btn-sm btn-danger" type="button"
                                 data-toggle="tooltip"
                                 id = "cancelGroup"
-                                data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                                data-original-title="Cancel"><i class="fa fa-remove"></i></button>
                             </div>
                           </form>
                         </div>
@@ -46,16 +46,20 @@
             {% for g in ldapGroups %}
             <div class="row">
                 <div class="col-md-1">
-                    <span class="avatar">{{g.cnDisplay}}</span>
+                    <span class="fa fa-stack">
+                    <!-- TODO make this nice-->
+                        <i class="fa fa-circle fa-stack-2x" style="color: #ff5722;"></i>
+                        <p class="fa-stack-2x circle-text" style="color: white;">{{g.cnDisplay}}</p>
+                    </span>
                 </div>
                 <div class="col-md-10">
                     <strong>{{g.cn}}</strong><br>
                 </div>
-                <div class="col-md-1 dropdown-info" data-for=".{{g.cnDisplay}}">
-                    <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+                <div class="col-md-1 dropdown-info" data-for=".{{g.cn}}">
+                    <i class="fa fa-chevron-down"></i>
                 </div>
             </div>
-            <div class="row info hidden {{g.cnDisplay}}">
+            <div class="row info hidden {{g.cn}}">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -83,10 +87,10 @@
                                                 <td>
                                                     <ul>
                                                         {% for user in g.member %}
-                                                        <li>{{user}} <span class="delGroupUser glyphicon glyphicon-remove" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
+                                                        <li>{{user}} <span class="delGroupUser fa fa-remove" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
                                                         {% endfor %}
                                                         <span class="edit-group" groupid="{{g.cn}}" type="addMember">
-                                                            <li><span class="glyphicon glyphicon-plus" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
+                                                            <li><span class="fa fa-plus" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
                                                         </span>
                                                     </ul>
                                                     <select class="form-control hidden">
@@ -106,7 +110,7 @@
                             <button class="btn btn-sm btn-danger delGroup" type="button"
                             data-toggle="tooltip"
                             value = "{{g.cn}}"
-                            data-original-title="Remove this group"><i class="glyphicon glyphicon-remove"></i></button>
+                            data-original-title="Remove this group"><i class="fa fa-remove"></i></button>
                         </div>
                     </div>
                 </div>
@@ -143,11 +147,11 @@
                                 <button class="btn btn-sm btn-success" type="submit"
                                 data-toggle="tooltip"
                                 id = "addUser"
-                                data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
+                                data-original-title="Add Group"><i class="fa fa-ok"></i></button>
                                 <button class="btn btn-sm btn-danger" type="button"
                                 data-toggle="tooltip"
                                 id = "cancelUser"
-                                data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                                data-original-title="Cancel"><i class="fa fa-remove"></i></button>
                             </div>
                           </form>
                     </div>
@@ -156,14 +160,18 @@
             {% for u in ldapUsers %}
             <div class="row">
                 <div class="col-md-1">
-                    <span class="avatar">{{u.user.getUid|slice:":1"|title}}</span>
+                <span class="fa fa-stack">
+                    <!-- TODO make this nice-->
+                        <i class="fa fa-circle fa-stack-2x" style="color: #03a9f4;"></i>
+                        <p class="fa-stack-2x circle-text" style="color: white;">{{u.user.getUid|slice:":1"|title}}</p>
+                    </span>
                 </div>
                 <div class="col-md-10">
                     <strong>{{u.user.getDisplayname}}</strong><br>
                     <span class="text-muted">Username: {{u.user.getUid}}</span>
                 </div>
                 <div class="col-md-1 dropdown-info" data-for=".{{u.user.getUidWithoutDots}}">
-                    <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+                    <i class="fa fa-chevron-down"></i>
                 </div>
             </div>
             <div class="row info hidden {{u.user.getUidWithoutDots}}">
@@ -216,7 +224,7 @@
                             <button class="btn btn-sm btn-danger delUser" type="button"
                             data-toggle="tooltip"
                             value = "{{u.user.getUid}}"
-                            data-original-title="Remove this user"><i class="glyphicon glyphicon-remove"></i></button>
+                            data-original-title="Remove this user"><i class="fa fa-remove"></i></button>
                         </div>
                     </div>
                 </div>
