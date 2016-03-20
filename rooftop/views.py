@@ -91,13 +91,15 @@ class UserprofilePasswordChange(View):
             if form['newPassword'].value() != form['confirmPassword'].value():
                 # print("not the same")
                 param['form']=form
-                param['statusError']=str("password has NOT been CHANGED, new password does not match")
+                param['statusError']=str("Passwords do not match, please try again.")
                 return render(request, self.template_name, param)
             param['form'] = self.form_class()
             if changePassword(request,form['oldPassword'].value(),form['newPassword'].value()):
-                param['status']=("thanks, password has been changed")
+                param['status']=("Password has been changed.")
             else:
-                param['statusError']=("wrong password, please try again")
+                param['statusError']=("Wrong password, please try again.")
+        else:
+            param['statusError']=("Invalid informations, please try again.")
 
         return render(request, self.template_name, param)
 
