@@ -28,4 +28,26 @@ $(document).ready(function () {
             }
         })
     });
+
+    $("#addUser").click(function(event){
+        addUser();
+    });
+
+    $("#cancelUser").click(function(event){
+        $('.addUser').slideToggle(400,function(){
+          //TODO clear fields
+            //clearUserFields();
+        });
+    });
+
+    $("#addGroup").click(function(event){
+        addGroup();
+    });
+
+    $("#cancelGroup").click(function(event){
+        $('.addGroup').slideToggle(400,function(){
+          //TODO clear fields
+            //clearGroupFields();
+        });
+    });
 });

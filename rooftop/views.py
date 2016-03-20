@@ -162,6 +162,8 @@ class AdminView(View):
         param=getHeaderParam(self.request)
         param['ldapUsers'] = getAllUserInformations()
         param['ldapGroups'] = getAllGroups()
+        param['formGroup']=AddGroupForm()
+        param['formUser']=AddUserForm()
         return render(request, self.template_name, param)
 
 def addUserToLdap(user):

@@ -12,33 +12,23 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">Group information</h3>
                         </div>
+                        <form action="/add/group/" method="post">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-1">
-
-                                </div>
-                                <div class=" col-md-10">
-                                    <strong>Group</strong><br>
-                                    <table class="table table-user-information">
-                                        <tbody>
-                                            <tr>
-                                                <td>Groupname:</td>
-                                                <td><input type="text" class="form-control input-sm" id="inputGroupname" placeholder="Gruppenname"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Description:</td>
-                                                <td><input type="text" class="form-control input-sm" id="inputDescription" placeholder="Kurze Beschreibung"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-1">
-
+                                <div class="col-md-10 col-md-offset-1">
+                                      {% csrf_token %}
+                                      {% for field in formGroup %}
+                                      <div class="row">
+                                          <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                          <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
+                                      </div>
+                                      {% endfor %}
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <button class="btn btn-sm btn-success" type="button"
+                            <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
+                            <button class="btn btn-sm btn-success" type="submit"
                             data-toggle="tooltip"
                             id = "addGroup"
                             data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
@@ -47,6 +37,7 @@
                             id = "cancelGroup"
                             data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
                         </div>
+                      </form>
                     </div>
                 </div>
             </div>
@@ -130,64 +121,32 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">User information</h3>
                         </div>
+                        <form action="/add/user/" method="post">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-1">
-
-                                </div>
-                                <div class=" col-md-10">
-                                    <strong>User</strong><br>
-                                    <table class="table-user-information">
-                                        <tbody>
-                                            <tr>
-                                                <td>Username:</td>
-                                                <td><fieldset disabled><input type="text" class="form-control input-sm" id="inputUsername" placeholder="Username"></fieldset></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Vorname:</td>
-                                                <td><input type="text" class="form-control input-sm" id="inputVorname" placeholder="Vorname"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Nachname:</td>
-                                                <td><input type="text" class="form-control input-sm" id="inputNachname" placeholder="Nachname"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Email:</td>
-                                                <td><input type="email" class="form-control input-sm" id="inputEmail" placeholder="Email"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Password:</td>
-                                                <td><input type="password" class="form-control input-sm" id="inputPassword" placeholder="Password"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Groups:</td>
-                                                <td>
-                                                    <ul>
-                                                        {% for group in u.groups %}
-                                                        <li>{{group}}</li>
-                                                        {% endfor %}
-                                                    </ul>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="col-md-1">
-
+                                <div class="col-md-10 col-md-offset-1">
+                                      {% csrf_token %}
+                                      {% for field in formUser %}
+                                      <div class="row">
+                                          <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                          <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
+                                      </div>
+                                      {% endfor %}
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <button class="btn btn-sm btn-success" type="button"
+                            <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
+                            <button class="btn btn-sm btn-success" type="submit"
+                            data-toggle="tooltip"
                             id = "addUser"
-                            data-toggle="tooltip"
-                            data-original-title="Add this user"><i class="glyphicon glyphicon-ok"></i></button>
+                            data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
                             <button class="btn btn-sm btn-danger" type="button"
-                            id = "cancelUser"
                             data-toggle="tooltip"
+                            id = "cancelUser"
                             data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
                         </div>
-                    </div>
+                      </form>
                 </div>
             </div>
         </div>
@@ -225,11 +184,11 @@
                                         </tr>
                                         <tr>
                                             <td>Vorname:</td>
-                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getFirstname}}</span></td>
+                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getVorname}}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Nachname:</td>
-                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getLastname}}</span></td>
+                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getNachname}}</span></td>
                                         </tr>
                                         <tr>
                                             <td>Email:</td>
