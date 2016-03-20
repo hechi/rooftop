@@ -1,33 +1,24 @@
 # rooftop
 
 ## Screenshots
-<table width="100%">
-    <tr>
-        <td width="50%">
-            ![Loginscreen](screenshots/login.png?raw=true "Loginscreen")
-        </td>
-        <td width="50%">
-            ![Profile](screenshots/profile.png?raw=true "Profile")
-        </td>
-    </tr>
-    <tr>
-        <td width="50%">
-            ![PasswordOK](screenshots/password_ok.png?raw=true "Password OK")
-        </td>
-        <td width="50%">
-            ![PasswordWrong](screenshots/password_wrong.png?raw=true "Password Wrong")
-        </td>
-    </tr>
-    <tr>
-        <td width="50%">
-            ![Admin](screenshots/admin1.png?raw=true "Admin")
-        </td>
-        <td width="50%">
-            ![AdminCollapsed](screenshots/admin2.png?raw=true "Admin collapsed")
-        </td>
-    </tr>
-</table>
+### Loginscreen
+![Loginscreen](screenshots/login.png?raw=true "Loginscreen")
+
+### Profile
+![Profile](screenshots/profile.png?raw=true "Profile")
+
+### Password change OK
+![PasswordOK](screenshots/password_ok.png?raw=true "Password OK")
+
+### Password change fail
+![PasswordWrong](screenshots/password_wrong.png?raw=true "Password Wrong")
+
+### Admin Panel overview
+![Admin](screenshots/admin1.png?raw=true "Admin")
+
+### Admin Panel collapsed option fields
+![AdminCollapsed](screenshots/admin2.png?raw=true "Admin collapsed")
 
 ##Authors
-Andreas Hechenberger <https://github.com/hechi>
+Andreas Hechenberger <https://github.com/hechi>  
 Christian Beneke <https://github.com/sattelite>
