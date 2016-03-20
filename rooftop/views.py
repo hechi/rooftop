@@ -369,7 +369,7 @@ def getAllGroups():
                                     member.append(str(mem.split(str("uid=").encode('utf-8'))[1].split(str(",").encode('utf-8'))[0]).encode('utf-8'))
 
                                 group={}
-                                group['cn']=str(cn)
+                                group['cn']=cn
                                 group['cnDisplay']=str(cn).replace(" ","_").replace(".","")
                                 group['member']=member
                                 group['description']=description
