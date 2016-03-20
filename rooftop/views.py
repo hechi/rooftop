@@ -370,7 +370,7 @@ def getAllGroups():
 
                                 group={}
                                 group['cn']=cn
-                                group['cnDisplay']=str(cn).replace(" ","_").replace(".","")
+                                group['cnDisplay']=encMsg(cn).replace(" ","_").replace(".","")
                                 group['member']=member
                                 group['description']=description
                                 #print group
