@@ -41,6 +41,14 @@ def start(request):
 def getHeaderParam(request):
     param = {}
     groups=[]
+
+    if isUserInGroup(request.user.username,"admin"):
+        group={}
+        group['icon']="glyphicon-wrench"
+        group['link']="/manage/"
+        group['name']="Admin"
+        groups.append(group)
+
     param['displayname'] = request.user.first_name
     param['groups'] = groups
     return param
