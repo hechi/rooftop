@@ -5,29 +5,29 @@ class LdapUser:
         self.lastname=lastname
         self.uid=uid
         self.mail=mail
-        self.displayname= encMsg(firstname)+" "+ encMsg(lastname)
+        self.displayname= str(firstname)+" "+ str(lastname)
         self.password=password
 
     def getFirstname(self):
         if self.firstname!=None and self.firstname != "" and self.firstname.strip():
-            return encMsg( (self.firstname) )
+            return str( (self.firstname) )
         else:
-            return encMsg( ("Firstname") )
+            return str( ("Firstname") )
 
     def getLastname(self):
         if self.lastname!=None and self.lastname != "" and self.lastname.strip():
-            return encMsg( (self.lastname) )
+            return str( (self.lastname) )
         else:
-            return encMsg( ("Lastname") )
+            return str( ("Lastname") )
 
     def getUid(self):
-        return encMsg(self.uid)
+        return str(self.uid)
 
     def getMail(self):
         if self.mail!=None and self.mail != "" and self.mail.strip():
-            return encMsg( (self.mail) )
+            return str( (self.mail) )
         else:
-            return encMsg( ("example@domain.com") )
+            return str( ("example@domain.com") )
 
     def getDisplayname(self):
         if self.displayname!=None and self.displayname != "" and self.displayname.strip():
@@ -39,7 +39,7 @@ class LdapUser:
         return str( (self.password) )
 
     def getUidWithoutDots(self):
-        return encMsg(self.getUid().replace('.','_'))
+        return str(self.getUid().replace('.','_'))
 
     def display(self):
         print("==== "+ (self.firstname)+" "+ (self.lastname)+" ====")

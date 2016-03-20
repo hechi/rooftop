@@ -38,7 +38,7 @@ TEMPLATES = [
     },
 ]
 
-ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1","10.20.2.228"]
 
 ### LDAP STUFF
 

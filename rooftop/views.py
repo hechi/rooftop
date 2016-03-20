@@ -55,7 +55,7 @@ class UserprofileView(View):
         userfields=dict([])
         userfields['Username']=request.user.username
         userfields['Full Name']=request.user.first_name + " " + request.user.last_name
-        
+
         param['userfields']=userfields
         param['ldapGroups']=getGroupsOfUser(request.user.username)
         #print(param)
@@ -336,7 +336,7 @@ def getAllUsers():
                                     mail=entry[1]['mail'][0]
                                 except:
                                     mail="ERROR"
-                                user=LdapUser(cn,sn,uid,mail)
+                                user=LdapUser(encMsg(cn),encMsg(sn),encMsg(uid),encMsg(mail))
                                 #user.display()
                                 users.append(user)
             l.unbind_s()
