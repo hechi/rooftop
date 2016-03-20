@@ -4,221 +4,225 @@
 {% csrf_token %}
 <div class="row">
     <div class="col-md-6 group-row">
-        <div class="header">
-            <h2>Groups <span class="glyphicon glyphicon-plus  dropdown-info" data-for=".addGroup"></span></h2>
-            <div class="row info hidden addGroup">
+        <div class="jumbotron">
+            <div class="header">
+                <h2>Groups <span class="fa fa-plus  dropdown-info" data-for=".addGroup"></span></h2>
+                <div class="row info hidden addGroup">
+                    <div class="col-md-10 col-md-offset-1">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Group information</h3>
+                            </div>
+                            <form name="groupform" action="/add/group/" method="post">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                          {% csrf_token %}
+                                          {% for field in formGroup %}
+                                          <div class="row">
+                                              <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                              <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
+                                          </div>
+                                          {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
+                                <button class="btn btn-sm btn-success" type="submit"
+                                data-toggle="tooltip"
+                                id = "addGroup"
+                                data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
+                                <button class="btn btn-sm btn-danger" type="button"
+                                data-toggle="tooltip"
+                                id = "cancelGroup"
+                                data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                            </div>
+                          </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% for g in ldapGroups %}
+            <div class="row">
+                <div class="col-md-1">
+                    <span class="avatar">{{g.cnDisplay}}</span>
+                </div>
+                <div class="col-md-10">
+                    <strong>{{g.cn}}</strong><br>
+                </div>
+                <div class="col-md-1 dropdown-info" data-for=".{{g.cnDisplay}}">
+                    <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+                </div>
+            </div>
+            <div class="row info hidden {{g.cnDisplay}}">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">Group information</h3>
                         </div>
-                        <form name="groupform" action="/add/group/" method="post">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                      {% csrf_token %}
-                                      {% for field in formGroup %}
-                                      <div class="row">
-                                          <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
-                                          <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
-                                      </div>
-                                      {% endfor %}
+                                <div class="col-md-3">
+                                    <span class="avatar">{{g.cnDisplay}}</span>
+                                </div>
+                                <div class=" col-md-9">
+                                    <strong>{{g.cn}}</strong><br>
+                                    <table class="table table-user-information">
+                                        <tbody>
+                                            <tr>
+                                                <td>Groupname:</td>
+                                                <td><span type="text">{{g.cn}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Description:</td>
+                                                <td><span class="edit-group" groupid="{{g.cn}}" type="text">{{g.description}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td><span class="edit-group" groupid="{{g.cn}}" type="addMember">Users:</span></td>
+                                                <td>
+                                                    <ul>
+                                                        {% for user in g.member %}
+                                                        <li>{{user}} <span class="delGroupUser glyphicon glyphicon-remove" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
+                                                        {% endfor %}
+                                                        <span class="edit-group" groupid="{{g.cn}}" type="addMember">
+                                                            <li><span class="glyphicon glyphicon-plus" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
+                                                        </span>
+                                                    </ul>
+                                                    <select class="form-control hidden">
+                                                        {% for u in ldapUsers %}
+                                                        <option value="{{u.user.getUid}}">{{u.user.getDisplayname}} ({{u.user.getUid}})</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                    <div class="text-center loader hidden"><img src="/static/img/loader.gif" id="loader"/></div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
-                            <button class="btn btn-sm btn-success" type="submit"
+                            <button class="btn btn-sm btn-danger delGroup" type="button"
                             data-toggle="tooltip"
-                            id = "addGroup"
-                            data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
-                            <button class="btn btn-sm btn-danger" type="button"
-                            data-toggle="tooltip"
-                            id = "cancelGroup"
-                            data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                            value = "{{g.cn}}"
+                            data-original-title="Remove this group"><i class="glyphicon glyphicon-remove"></i></button>
                         </div>
-                      </form>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% for g in ldapGroups %}
-        <div class="row">
-            <div class="col-md-1">
-                <span class="avatar">{{g.cnDisplay}}</span>
-            </div>
-            <div class="col-md-10">
-                <strong>{{g.cn}}</strong><br>
-            </div>
-            <div class="col-md-1 dropdown-info" data-for=".{{g.cnDisplay}}">
-                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
-            </div>
-        </div>
-        <div class="row info hidden {{g.cnDisplay}}">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Group information</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <span class="avatar">{{g.cnDisplay}}</span>
-                            </div>
-                            <div class=" col-md-9">
-                                <strong>{{g.cn}}</strong><br>
-                                <table class="table table-user-information">
-                                    <tbody>
-                                        <tr>
-                                            <td>Groupname:</td>
-                                            <td><span type="text">{{g.cn}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Description:</td>
-                                            <td><span class="edit-group" groupid="{{g.cn}}" type="text">{{g.description}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td><span class="edit-group" groupid="{{g.cn}}" type="addMember">Users:</span></td>
-                                            <td>
-                                                <ul>
-                                                    {% for user in g.member %}
-                                                    <li>{{user}} <span class="delGroupUser glyphicon glyphicon-remove" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
-                                                    {% endfor %}
-                                                    <span class="edit-group" groupid="{{g.cn}}" type="addMember">
-                                                        <li><span class="glyphicon glyphicon-plus" groupid="{{g.cn}}" delUser="{{user}}"></span></li>
-                                                    </span>
-                                                </ul>
-                                                <select class="form-control hidden">
-                                                    {% for u in ldapUsers %}
-                                                    <option value="{{u.user.getUid}}">{{u.user.getDisplayname}} ({{u.user.getUid}})</option>
-                                                    {% endfor %}
-                                                </select>
-                                                <div class="text-center loader hidden"><img src="/static/img/loader.gif" id="loader"/></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button class="btn btn-sm btn-danger delGroup" type="button"
-                        data-toggle="tooltip"
-                        value = "{{g.cn}}"
-                        data-original-title="Remove this group"><i class="glyphicon glyphicon-remove"></i></button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
     </div>
     <div class="col-md-6 user-row" id="user-row">
-        <div class="header">
-            <h2>Users <span class="glyphicon glyphicon-plus  dropdown-info" data-for=".addUser"></span></h2>
-            <div class="row info hidden addUser">
-                <div class="col-md-11 col-md-offset-1">
+        <div class="jumbotron">
+            <div class="header">
+                <h2>Users <span class="fa fa-plus  dropdown-info" data-for=".addUser"></span></h2>
+                <div class="row info hidden addUser">
+                    <div class="col-md-11 col-md-offset-1">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">User information</h3>
+                            </div>
+                            <form name="userform" action="/add/user/" method="post">
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="col-md-10 col-md-offset-1">
+                                          {% csrf_token %}
+                                          {% for field in formUser %}
+                                          <div class="row">
+                                              <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
+                                              <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
+                                          </div>
+                                          {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel-footer">
+                                <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
+                                <button class="btn btn-sm btn-success" type="submit"
+                                data-toggle="tooltip"
+                                id = "addUser"
+                                data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
+                                <button class="btn btn-sm btn-danger" type="button"
+                                data-toggle="tooltip"
+                                id = "cancelUser"
+                                data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                            </div>
+                          </form>
+                    </div>
+                </div>
+            </div>
+            {% for u in ldapUsers %}
+            <div class="row">
+                <div class="col-md-1">
+                    <span class="avatar">{{u.user.getUid}}</span>
+                </div>
+                <div class="col-md-10">
+                    <strong>{{u.user.getDisplayname}}</strong><br>
+                    <span class="text-muted">Username: {{u.user.getUid}}</span>
+                </div>
+                <div class="col-md-1 dropdown-info" data-for=".{{u.user.getUidWithoutDots}}">
+                    <i class="glyphicon glyphicon-chevron-down text-muted"></i>
+                </div>
+            </div>
+            <div class="row info hidden {{u.user.getUidWithoutDots}}">
+                <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <h3 class="panel-title">User information</h3>
                         </div>
-                        <form name="userform" action="/add/user/" method="post">
                         <div class="panel-body">
                             <div class="row">
-                                <div class="col-md-10 col-md-offset-1">
-                                      {% csrf_token %}
-                                      {% for field in formUser %}
-                                      <div class="row">
-                                          <div class="col-xs-4"><label class="form-control-label">{{field.label}}</label></div>
-                                          <div class="col-xs-8">{{ field | add_class:"form-control" }}</div>
-                                      </div>
-                                      {% endfor %}
+                                <div class="col-md-3">
+                                    <span class="avatar">{{u.user.getUid}}</span>
+                                </div>
+                                <div class=" col-md-9">
+                                    <strong>{{u.user.getDisplayname}}</strong><br>
+                                    <table class="table-user-information">
+                                        <tbody>
+                                            <tr>
+                                                <td>Username:</td>
+                                                <td>{{u.user.getUid}}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Vorname:</td>
+                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getVorname}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Nachname:</td>
+                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getNachname}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Email:</td>
+                                                <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="email">{{u.user.getMail}}</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Groups:</td>
+                                                <td>
+                                                    <ul>
+                                                        {% for group in u.groups %}
+                                                        <li>{{group}}</li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                         <div class="panel-footer">
-                            <!--<input type="submit" value="Submit" class="btn btn-success btn-group-justified" />-->
-                            <button class="btn btn-sm btn-success" type="submit"
+                            <button class="btn btn-sm btn-danger delUser" type="button"
                             data-toggle="tooltip"
-                            id = "addUser"
-                            data-original-title="Add Group"><i class="glyphicon glyphicon-ok"></i></button>
-                            <button class="btn btn-sm btn-danger" type="button"
-                            data-toggle="tooltip"
-                            id = "cancelUser"
-                            data-original-title="Cancel"><i class="glyphicon glyphicon-remove"></i></button>
+                            value = "{{u.user.getUid}}"
+                            data-original-title="Remove this user"><i class="glyphicon glyphicon-remove"></i></button>
                         </div>
-                      </form>
-                </div>
-            </div>
-        </div>
-        {% for u in ldapUsers %}
-        <div class="row">
-            <div class="col-md-1">
-                <span class="avatar">{{u.user.getUid}}</span>
-            </div>
-            <div class="col-md-10">
-                <strong>{{u.user.getDisplayname}}</strong><br>
-                <span class="text-muted">Username: {{u.user.getUid}}</span>
-            </div>
-            <div class="col-md-1 dropdown-info" data-for=".{{u.user.getUidWithoutDots}}">
-                <i class="glyphicon glyphicon-chevron-down text-muted"></i>
-            </div>
-        </div>
-        <div class="row info hidden {{u.user.getUidWithoutDots}}">
-            <div class="col-md-10 col-md-offset-1">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">User information</h3>
-                    </div>
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <span class="avatar">{{u.user.getUid}}</span>
-                            </div>
-                            <div class=" col-md-9">
-                                <strong>{{u.user.getDisplayname}}</strong><br>
-                                <table class="table-user-information">
-                                    <tbody>
-                                        <tr>
-                                            <td>Username:</td>
-                                            <td>{{u.user.getUid}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Vorname:</td>
-                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="firstname">{{u.user.getVorname}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Nachname:</td>
-                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="lastname">{{u.user.getNachname}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Email:</td>
-                                            <td><span class="edit-user" userid="{{u.user.getUid}}" type="text" element="email">{{u.user.getMail}}</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Groups:</td>
-                                            <td>
-                                                <ul>
-                                                    {% for group in u.groups %}
-                                                    <li>{{group}}</li>
-                                                    {% endfor %}
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="panel-footer">
-                        <button class="btn btn-sm btn-danger delUser" type="button"
-                        data-toggle="tooltip"
-                        value = "{{u.user.getUid}}"
-                        data-original-title="Remove this user"><i class="glyphicon glyphicon-remove"></i></button>
                     </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
 </div>
 {% endblock %}

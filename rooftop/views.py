@@ -44,7 +44,7 @@ def getHeaderParam(request):
 
     if isUserInGroup(request.user.username,"admin"):
         group={}
-        group['icon']="glyphicon-wrench"
+        group['icon']="fa-wrench"
         group['link']="/manage/"
         group['name']="Admin"
         groups.append(group)
