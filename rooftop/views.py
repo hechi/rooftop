@@ -51,6 +51,8 @@ class UserprofileView(View):
     def get(self, request, *args, **kwargs):
         param = {}
         param=getHeaderParam(self.request)
+        param['ldapGroups']=getGroupsOfUser(request.user.username)
+        #print(param)
         return render(request, self.template_name, param)
 
 class UserprofilePasswordChange(View):
@@ -184,14 +186,14 @@ def addUserToLdap(user):
         # TODO generate uniq uidNumber
         # TODO check if its uniq
         attrs['uidNumber']=[str(1000).encode('utf-8')]
-        print(attrs)
+        #print(attrs)
         # Convert our dict to nice syntax for the add-function using modlist-module
         ldif = modlist.addModlist(attrs)
 
         # Do the actual synchronous add-operation to the ldapserver
-        print('add_s')
-        print(type(dn))
-        print(type(ldif))
+        #print('add_s')
+        #print(type(dn))
+        #print(type(ldif))
         con.add_s(dn,ldif)
 
         # Its nice to the server to disconnect and free resources when done
@@ -390,7 +392,9 @@ def getGroupsOfUser(username):
     groups=getAllGroups()
     listOfGroups=[]
     for group in groups:
-        if username in group['member']:
+        #print(type(group['member'][0]))
+        #print(type(str(username).encode('utf-8')))
+        if str(username) in str(group['member']):
             listOfGroups.append(group['cn'])
     return listOfGroups
 
