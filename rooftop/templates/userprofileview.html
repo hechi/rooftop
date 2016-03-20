@@ -2,10 +2,29 @@
 {% load widget_tweaks %}
 {% block content %}
     <div class="row">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-8 col-md-offset-2">
             <center><h2>Your Profile</h2></center>
-            {% if displayname %}
-            <center>Username: {{displayname}}</center>
+
+            {% if userfields or ldapGroups %}
+            <table class="table table-hover">
+            {% for f in userfields %}
+            <tr>
+                <td>{{ f.key }}</td>
+                <td>{{ f.value }}</td>
+            </tr>
+            {% endfor %}
+            {% for g in ldapGroups %}
+            <tr>
+                <th>{% if forloop.first %}<center>Groups</center>{% endif %}</th>
+                <td><center>{{ g }}</center></td>
+            </tr>
+            {% endfor %}
+            </table>
+            {% else %}
+            <div class="alert alert-info">
+                <strong>Sorry!</strong> No information for your account found!
+                <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="fa fa-close"></i></a>
+            </div>
             {% endif %}
         </div>
     </div>

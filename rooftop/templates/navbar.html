@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
-            <img alt="Brand" height="25" src="{{ STATIC_PREFIX }}img/rooftop_small.png">
+            <img alt="Brand" height="25" src="{{ STATIC_PREFIX }}img/rooftop_small_white.png">
             </a>
         </div>
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -17,7 +17,7 @@
             {% for group in groups %}
             {% if group.external %}
             <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
-            {% else %} 
+            {% else %}
             <li class="navlinks"><a href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
             {% endif %}
             {% endfor %}
@@ -26,7 +26,7 @@
         <ul class="nav navbar-nav navbar-right">
             <li>
               {% if displayname %}
-              <p class="navbar-text">Signed in as {{displayname}} &nbsp;<a class="navbar-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></p>        
+              <p class="navbar-text">Signed in as {{displayname}} &nbsp;<a class="navbar-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></p>
               {% endif %}
           </li>
       </ul>

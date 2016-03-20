@@ -2,3 +2,7 @@ label {
   margin-bottom: 0px;
   margin-top: 8px;
 }
+
+.table th, .table td { 
+     border-top: none !important;
+ }
