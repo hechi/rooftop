@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^profile/password/$',login_required(UserprofilePasswordChange.as_view())),
     url(r'^add/user/$',login_required(AddUserView.as_view())),
     url(r'^add/group/$',login_required(AddGroupView.as_view())),
+    url(r'^mod/group/$',login_required(modGroup)),
     url(r'^manage/$',login_required(AdminView.as_view())),
     url(r'^logout/$', auth_views.logout,{'next_page': '/'}),
 ]

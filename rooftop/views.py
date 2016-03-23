@@ -309,7 +309,7 @@ def changePassword(request,oldPassword,newPassword):
         retValue=False
 
     # Its nice to the server to disconnect and free resources when done
-    print(retValue)
+    #print(retValue)
     l.unbind_s()
     return retValue
 
@@ -399,6 +399,74 @@ def getAllGroups():
     except ldap.LDAPError:
         traceback.print_exc(file=sys.stdout)
     return groups
+
+def modGroup(request):
+    check = False
+    if isUserInGroup(request.user.username,settings.AUTH_LDAP_ADMIN_GROUP):
+        if 'modGroupname' in request.POST and 'modDescription' in request.POST:
+            groupname=request.POST['modGroupname']
+            description=request.POST['modDescription']
+            check=modGroupInLdap(groupname,description)
+        if 'modGroupname' in request.POST and 'addUser' in request.POST:
+            check=modUserToGroup(request.POST['addUser'],request.POST['modGroupname'],False)
+        if 'modGroupname' in request.POST and 'delUser' in request.POST:
+            check=modUserToGroup(request.POST['delUser'],request.POST['modGroupname'],True)
+    return HttpResponse(json.dumps(check), content_type="application/json")
+
+def modUserToGroup(username,groupname,removeFlag=False):
+    check = False
+    if not isUserInGroup(username,groupname) or removeFlag:
+        # Open a connection
+        l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+
+        # Bind/authenticate with a user with apropriate rights to add objects
+        l.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+
+        # The dn of our new entry/object
+        dn="uid="+str(username)+","+str(settings.AUTH_LDAP_BASE_USER_DN)
+
+        ## The next lines will also need to be changed to support your search requirements and directory
+        baseDN = str(settings.AUTH_LDAP_BASE_GROUP_DN)
+        searchScope = ldap.SCOPE_SUBTREE
+        ## retrieve all attributes - again adjust to your needs - see documentation for more options
+        retrieveAttributes = None
+        #searchFilter = "(&(objectClass=groupOfNames)(CN=owncloud))"
+        searchFilter = "(&(objectClass=groupOfNames)(CN="+groupname+"))"
+
+        try:
+            ldap_result_id = l.search(baseDN, searchScope, searchFilter, retrieveAttributes)
+            result_set = []
+            res = {}
+            while 1:
+                result_type, result_data = l.result(ldap_result_id, 0)
+                if (result_data == []):
+                    break
+                else:
+                    ## here you don't have to append to a list
+                    ## you could do whatever you want with the individual entry
+                    ## The appending to list is just for illustration.
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        # add user to group
+                        result_data[0][1]['member'].append(dn)
+                        result_set.append(result_data)
+            members = []
+            for r in result_set[0][0][1]['member']:
+                #print(str(r)+"!="+str(dn)+" FLAG:"+str(removeFlag))
+                if r != dn or (removeFlag == False and r == dn):
+                    members.append(str(r).encode('utf-8'))
+            print(members)
+            attr=[(ldap.MOD_REPLACE,'member',members)]
+            l.modify_s('cn='+str(groupname)+","+str(baseDN),attr)
+
+            l.unbind_s()
+            check=True
+        #print result_set
+        except ldap.LDAPError:
+            traceback.print_exc(file=sys.stdout)
+            check=False
+    else:
+        check = True
+    return check
 
 def getUsersOfGroup(groupname):
     #print "return users of given group"

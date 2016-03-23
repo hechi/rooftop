@@ -1,5 +1,6 @@
 function innlineEdit(orig,callback){
     var type = $(orig).attr('type');
+    console.log($(orig))
     if(type == "addMember"){
         var userlist=$(orig).parent().parent().find('select');
         var ulList = $(orig).parent().parent().find('ul');
@@ -27,7 +28,7 @@ function innlineEdit(orig,callback){
                 $(loader).removeClass("hidden");
                 $(loader).show();
                 $(userlist).hide();
-                /*
+
                 addUserToGroup($(orig).attr("groupid"),userlist.val(),function(result){
                     //console.log(result)
                     //console.log($(orig).parent().parent().find('ul'))
@@ -45,7 +46,7 @@ function innlineEdit(orig,callback){
                         $(loader).hide();
                     }
                 });
-                */
+
             });
         }else{
             var msg=$("<p>Alle User sind in dieser Gruppe vorhanden</p>");
@@ -57,9 +58,33 @@ function innlineEdit(orig,callback){
     }
 }
 
+function addUserToGroup(groupname,username,callback){
+    param = {}
+    param['modGroupname']=groupname;
+    param['addUser']=username;
+    sendPostQuery("modGroup/",param,function(data){
+        callback(data);
+    });
+}
+
+function sendPostQuery(query,param,callback,type){
+    if (typeof type === "undefined" || type === null) {
+        type = "json";
+    }
+    param['csrfmiddlewaretoken'] = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    //param['monthID'] = document.getElementsByName('monthID')[0].value;
+    $.ajax({
+        url : query,
+        type: "POST",
+        data : param,
+        dataType : type,
+        success: function(data){
+            callback(data);
+        }
+    });
+}
 
 $(document).ready(function () {
-    $('select').searchableSelect();
     var panels = $('.info');
     var panelsButton = $('.dropdown-info');
     panels.hide();
@@ -139,17 +164,17 @@ $(document).ready(function () {
         });
     });
 
-    $('.edit-group').click(function(){
-        var elem = $(this);
-        innlineEdit($(elem),function(value){
-          /*
-            param = {}
-            param['modGroupname']=$(elem).attr("groupid");
-            param['modDescription']=value;
-            sendPostQuery("modGroup/",param,function(data){
-                elem.append($('<i class="glyphicon glyphicon-ok">'))
-            });
-          */
-        })
+    $('.add-user-to-group').click(function(){
+        //var elem = $(this);
+        var elem = $(this).parent().find('select');
+        console.log(elem)
+        var userName=$(elem).val();
+        var groupName=$(elem).attr('groupid');
+        param = {}
+        param['modGroupname']=groupName;
+        param['addUser']=userName;
+        sendPostQuery("/mod/group/",param,function(data){
+            elem.append($('<i class="glyphicon glyphicon-ok">'))
+        });
     });
 });
