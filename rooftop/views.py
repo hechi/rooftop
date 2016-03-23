@@ -453,7 +453,11 @@ def modUserToGroup(username,groupname,removeFlag=False):
             for r in result_set[0][0][1]['member']:
                 #print(str(r)+"!="+str(dn)+" FLAG:"+str(removeFlag))
                 if r != dn or (removeFlag == False and r == dn):
-                    members.append(str(r).encode('utf-8'))
+                    #print(type(r)==bytes)
+                    if(type(r)==bytes):
+                        members.append(r)
+                    else:
+                        members.append(str(r).encode('utf-8'))
             print(members)
             attr=[(ldap.MOD_REPLACE,'member',members)]
             l.modify_s('cn='+str(groupname)+","+str(baseDN),attr)
