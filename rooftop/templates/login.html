@@ -9,13 +9,15 @@
 {% endblock %}
 {% block content %}
     <center><img alt="LOGIN" height="100" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
-    <br>
-    <form id="login" method="post" class="form-signin" role="form" action="/">
-        {% csrf_token %}
-        <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
-        <input type="password" class="form-control" placeholder="Password" required id="id_password" name="password">
+    <br />
+    <div class="col-md-8 col-md-offset-2">
+        <form id="login" method="post" class="form-signin" role="form" action="/">
+            {% csrf_token %}
+            <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
+            <input type="password" class="form-control" placeholder="Password" required id="id_password" name="password">
 
-        <input type="hidden" name="next" value="{{ next }}" />
-        <button id="connect" class="btn btn-primary btn-block" type="submit" value="login">Login</button>
-    </form>
+            <input type="hidden" name="next" value="{{ next }}" />
+            <button id="connect" class="btn btn-primary btn-block" type="submit" value="login">Login</button>
+        </form>
+    </div>
 {% endblock %}
