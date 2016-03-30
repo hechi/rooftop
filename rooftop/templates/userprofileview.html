@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
+{% block header %}Your Profile{% endblock %}
 {% block content %}
-    <h2>Your Profile</h2>
     {% if userfields or ldapGroups %}
     <table class="table table-condensed">
     {% for key,value in userfields.items %}

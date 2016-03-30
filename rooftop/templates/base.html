@@ -44,6 +44,11 @@
     {% block jumbotron_overwrite %}
         <div class="row">
             <div class="col-md-8 col-md-offset-2 jumbotron">
+            {% block noheader %}
+            <div class="page-header text-center">
+                <h2>{% block header %}Rooftop{% endblock %}</h2>
+            </div>
+            {% endblock %}
             {% block content %}{% endblock %}
             </div>
         </div>

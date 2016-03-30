@@ -8,8 +8,8 @@
     <div id="status" class="alert alert-danger">{{ statusError }}</div>
     {% endif %}
 {% endblock %}
+{% block header %}{{formtitle}}{% endblock %}
 {% block content %}
-    <center><h2>{{formtitle}}</h2></center>
     <form action="." method="post">
         {% csrf_token %}
         {% for field in form %}

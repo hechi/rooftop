@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block alters %}
+{% block alerts %}
     {% if form.errors %}
     <div id="status" class="alert alert-danger">
         <p>Your username and/or password is wrong. Please try again.</p>
@@ -7,6 +7,7 @@
     </div>
     {% endif %}
 {% endblock %}
+{% block noheader %}{% endblock %}
 {% block content %}
     <center><img alt="LOGIN" height="100" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
     <br />
