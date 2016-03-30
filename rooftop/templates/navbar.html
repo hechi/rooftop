@@ -2,37 +2,37 @@
     <div class="container-fluid">
         <div class="navbar-header">
             <a class="navbar-brand" href="/">
-            <img alt="Brand" height="25" src="{{ STATIC_PREFIX }}img/rooftop_small_white.png">
+                <img alt="Brand" height="25" src="{{ STATIC_PREFIX }}img/rooftop_small_white.png">
             </a>
         </div>
 
         <!-- TODO: Fix collapse -->
 
+        {% if displayname %}
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <ul class="nav navbar-nav navbar-left">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i>&nbsp; Profile &nbsp;<i class="fa fa-caret-down"></i></a>
-              <ul class="dropdown-menu">
-                <li><a href="/profile/">View Profile</a></li>
-                <li><a href="/profile/password">Change Password</a></li>
-              </ul>
-            </li>
-            {% for group in groups %}
-            {% if group.external %}
-            <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
-            {% else %}
-            <li class="navlinks"><a href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
-            {% endif %}
-            {% endfor %}
-            <li class="divider"></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-              {% if displayname %}
-              <p class="navbar-text">Signed in as {{displayname}} &nbsp;<a class="navbar-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></p>
-              {% endif %}
-          </li>
-      </ul>
-  </div>
-</div>
+            <ul class="nav navbar-nav navbar-left">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-user"></i>&nbsp; Profile &nbsp;<i class="fa fa-caret-down"></i></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/profile/">View Profile</a></li>
+                        <li><a href="/profile/password">Change Password</a></li>
+                    </ul>
+                </li>
+                {% for group in groups %}
+                {% if group.external %}
+                <li class="navlinks"><a target="_blank" href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
+                {% else %}
+                <li class="navlinks"><a href="{{group.link}}"><i class="fa {{group.icon}}"></i>&nbsp; {{group.name}}</a></li>
+                {% endif %}
+                {% endfor %}
+                <li class="divider"></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <p class="navbar-text">Signed in as {{displayname}} &nbsp;<a class="navbar-link" href="/logout"><i class="fa fa-sign-out" aria-hidden="true"></i></a></p>
+                </li>
+            </ul>
+        </div>
+        {% endif %}
+    </div>
 </nav>
