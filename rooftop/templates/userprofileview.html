@@ -1,31 +1,27 @@
 {% extends "base.html" %}
 {% load widget_tweaks %}
 {% block content %}
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2 jumbotron text-center">
-            <h2>Your Profile</h2>
-            {% if userfields or ldapGroups %}
-            <table class="table table-condensed">
-            {% for key,value in userfields.items %}
-            <tr>
-                <th class="text-center active">{{ key }}</td>
-                <td class="text-center active">{{ value }}</td>
-            </tr>
-            {% endfor %}
-            <tr><td></td></tr>
-            {% for g in ldapGroups %}
-            <tr>
-                <th class="text-center active">{% if forloop.first %}Groups{% endif %}</th>
-                <td class="text-center active">{{ g }}</td>
-            </tr>
-            {% endfor %}
-            </table>
-            {% else %}
-            <div class="alert alert-info">
-                <strong>Sorry!</strong> No information for your account found!
-                <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="fa fa-close"></i></a>
-            </div>
-            {% endif %}
-        </div>
+    <h2>Your Profile</h2>
+    {% if userfields or ldapGroups %}
+    <table class="table table-condensed">
+    {% for key,value in userfields.items %}
+    <tr>
+        <th class="text-center active">{{ key }}</td>
+        <td class="text-center active">{{ value }}</td>
+    </tr>
+    {% endfor %}
+    <tr><td></td></tr>
+    {% for g in ldapGroups %}
+    <tr>
+        <th class="text-center active">{% if forloop.first %}Groups{% endif %}</th>
+        <td class="text-center active">{{ g }}</td>
+    </tr>
+    {% endfor %}
+    </table>
+    {% else %}
+    <div class="alert alert-info">
+        <strong>Sorry!</strong> No information for your account found!
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="fa fa-close"></i></a>
     </div>
+    {% endif %}
 {% endblock %}

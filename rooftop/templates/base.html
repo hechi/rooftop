@@ -40,8 +40,15 @@
 {% include "navbar.html" %}
 
 <div class="container container-fluid">
-{% block content %}{% endblock %}
-
+    {% block alerts %}{% endblock %}
+    {% block jumbotron_overwrite %}
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2 jumbotron">
+            {% block content %}{% endblock %}
+            </div>
+        </div>
+    {% endblock %}
+</div>
 </body>
 
 </html>
