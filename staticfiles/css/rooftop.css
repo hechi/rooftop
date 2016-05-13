@@ -1,0 +1,16 @@
+label {
+    margin-bottom: 0px;
+    margin-top: 8px;
+}
+
+.table th, .table td {
+    border-top: none !important;
+ }
+
+.header span.fa-plus{
+        float:right;
+        display: block;
+        padding-top: 10px;
+        margin-left: 10px;
+        font-size:20px;
+}

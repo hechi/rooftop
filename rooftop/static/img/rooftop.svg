@@ -15,10 +15,10 @@
    id="svg2"
    version="1.1"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="rooftop_3.svg"
-   inkscape:export-filename="/home/poxy/projects/rooftop/rooftop/static/img/rooftop_3.png"
-   inkscape:export-xdpi="974"
-   inkscape:export-ydpi="974">
+   sodipodi:docname="rooftop.svg"
+   inkscape:export-filename="/home/poxy/projects/rooftop/rooftop/static/img/rooftop_small.png"
+   inkscape:export-xdpi="30.48"
+   inkscape:export-ydpi="30.48">
   <defs
      id="defs4">
     <pattern
@@ -137,13 +137,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.8"
-     inkscape:cx="152.53484"
-     inkscape:cy="173.26763"
+     inkscape:cx="60.03484"
+     inkscape:cy="101.83906"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1364"
-     inkscape:window-height="747"
+     inkscape:window-width="1362"
+     inkscape:window-height="745"
      inkscape:window-x="0"
      inkscape:window-y="19"
      inkscape:window-maximized="1"
@@ -159,7 +159,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>

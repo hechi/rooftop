@@ -25,13 +25,20 @@ with open(os.path.join(BASE_DIR,'secret_key.txt')) as f:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-TEMPLATE_DEBUG = True
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'DIRS' : ['rooftop/templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth',
+            ],
+        },
+    },
+]
 
-TEMPLATE_DIRS = (
-        os.path.join(BASE_DIR, 'rooftop/templates'),
-)
-
-ALLOWED_HOSTS = ["localhost","127.0.0.1"]
+ALLOWED_HOSTS = ["localhost","127.0.0.1","10.20.2.228"]
 
 ### LDAP STUFF
 
@@ -41,6 +48,7 @@ AUTH_LDAP_BIND_DN = "cn=admin,dc=example,dc=de"
 AUTH_LDAP_BASE_USER_DN = "ou=users,dc=example,dc=de"
 AUTH_LDAP_BASE_GROUP_DN = "ou=groups,dc=example,dc=de"
 AUTH_LDAP_BIND_PASSWORD = "root"
+AUTH_LDAP_ADMIN_GROUP = "admin"
 
 # SECURITY WARNING: keep the secret key used in production secret!
 with open(os.path.join(BASE_DIR,'ldap_passwd.txt')) as f:
@@ -151,4 +159,3 @@ STATIC_ROOT = 'staticfiles/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR,'rooftop/static'),
 )
-

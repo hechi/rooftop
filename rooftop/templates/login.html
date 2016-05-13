@@ -1,25 +1,24 @@
 {% extends "base.html" %}
-
-{% block content %}
-<div class="container login">
+{% block alerts %}
     {% if form.errors %}
-    <div id="status" class="alert alert-danger"><p>Your username and/or password is wrong. Please try again.</p></div>
-    {% endif %}
-    <div class="row">
-        <div class="col-md-4"></div>
-        <div class="col-md-4">
-            <center><img alt="LOGIN" height="100" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
-            <br>
-            <form id="login" method="post" class="form-signin" role="form" action="/">
-                {% csrf_token %}                
-                <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
-                <input type="password" class="form-control" placeholder="Password" required id="id_password" name="password">
-
-                <input type="hidden" name="next" value="{{ next }}" />
-                <button id="connect" class="btn btn-primary btn-block" type="submit" value="login">Login</button>
-            </form>
-        </div>
-        <div class="col-md-4"></div>
+    <div id="status" class="alert alert-danger">
+        <p>Your username and/or password is wrong. Please try again.</p>
+        <a href="#" class="close" data-dismiss="alert" aria-label="close"><i class="fa fa-close"></i></a>
     </div>
-</div>
+    {% endif %}
+{% endblock %}
+{% block noheader %}{% endblock %}
+{% block content %}
+    <center><img alt="LOGIN" height="100" src="{{STATIC_PREFIX}}img/rooftop.png"></center>
+    <br />
+    <div class="col-md-8 col-md-offset-2">
+        <form id="login" method="post" class="form-signin" role="form" action="/">
+            {% csrf_token %}
+            <input type="text" class="form-control" placeholder="Username" required autofocus id="id_username" maxlength="254" name="username">
+            <input type="password" class="form-control" placeholder="Password" required id="id_password" name="password">
+
+            <input type="hidden" name="next" value="{{ next }}" />
+            <button id="connect" class="btn btn-primary btn-block" type="submit" value="login">Login</button>
+        </form>
+    </div>
 {% endblock %}

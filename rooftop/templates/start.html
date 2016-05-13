@@ -1,10 +1,13 @@
 {% extends "base.html" %}
-{% block content %}
+{% block alerts%}
     {% if status %}
     <div id="status" class="alert alert-success">{{ status }}</div>
     {% endif %}
     {% if statusError %}
     <div id="status" class="alert alert-danger">{{ statusError }}</div>
     {% endif %}
+{% endblock %}
+
+{% block content %}
     <center><p>SOME GREATE STUFF HERE</p></center>
 {% endblock %}
