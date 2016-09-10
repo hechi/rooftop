@@ -43,7 +43,7 @@ ALLOWED_HOSTS = ["localhost","127.0.0.1","10.20.2.228"]
 ### LDAP STUFF
 
 # Binding and connection options
-AUTH_LDAP_SERVER_URI = "ldap://192.168.56.101:389"
+AUTH_LDAP_SERVER_URI = "ldap://192.168.56.102:389"
 AUTH_LDAP_BIND_DN = "cn=admin,dc=example,dc=de"
 AUTH_LDAP_BASE_USER_DN = "ou=users,dc=example,dc=de"
 AUTH_LDAP_BASE_GROUP_DN = "ou=groups,dc=example,dc=de"

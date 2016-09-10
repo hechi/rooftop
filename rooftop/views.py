@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseForbidden
 from django.template import RequestContext
 from django.template.loader import get_template
 from django.template import Context
@@ -9,6 +9,7 @@ from django.views.generic import View
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import login
+from django.core.urlresolvers import reverse
 from django.contrib.auth.forms import (
     AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm,
 )
@@ -17,7 +18,7 @@ import json
 import ldap
 import ldap.modlist as modlist
 from passlib.hash import ldap_md5 as lsm
-from .forms import UserprofileForm, AddUserForm, AddGroupForm
+from .forms import UserprofileForm, AddUserForm, AddGroupForm, EditUserForm
 
 from .models import LdapUser
 
@@ -177,6 +178,105 @@ class AdminView(View):
         param['formUser']=AddUserForm()
         return render(request, self.template_name, param)
 
+class EditUserView(View):
+    form_class = EditUserForm
+    template_name = 'edit.html'
+
+    def get(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
+        #form = self.form_class()
+        if isUserInGroup(request.user.username,settings.AUTH_LDAP_ADMIN_GROUP):
+            param={}
+            param=getHeaderParam(self.request)
+            param['formtitle']='Edit User'
+            user = getUser(self.kwargs['uid'])
+            form = EditUserForm(initial={'firstname': user.firstname, 'lastname': user.lastname,'email':user.mail})
+            param['form']=form
+            return render(request, self.template_name, param)
+        else:
+            return HttpResponseRedirect(reverse('start'))
+
+    def post(self, request, *args, **kwargs):
+        #TODO check if user is in administration group
+        form = self.form_class(request.POST)
+        check=False
+        param={}
+        param=getHeaderParam(self.request)
+        param['formtitle']='Edit User'
+        param['form']=form
+        if isUserInGroup(request.user.username,settings.AUTH_LDAP_ADMIN_GROUP):
+            # <process form cleaned data>
+            #user=getUser(self.kwargs['uid'])
+            uid=self.kwargs['uid']
+            cn= form['firstname'].value()
+            sn= form['lastname'].value()
+            mail= form['email'].value()
+            password= form['password'].value()
+            user = LdapUser(cn,sn,uid,mail,password)
+            check=modUser(user)
+            param['status']=check
+
+        #return HttpResponse(json.dumps(check), content_type="application/json")
+        return render(request, self.template_name, param)
+
+def modUser(user):
+    check = False
+    try:
+        # Open a connection
+        con = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+
+        # Bind/authenticate with a user with apropriate rights to add objects
+        con.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+        # The dn of our new entry/object
+        dn="uid="+user.getUid()+","+str(settings.AUTH_LDAP_BASE_USER_DN)
+
+        userOld=getUser(user.getUid())
+        # A dict to help build the "body" of the object
+        # TODO: clean this
+        attrs = {}
+        attrs['cn'] = [str(user.getFirstname()).encode('utf-8')]
+        attrs['mail'] = [str(user.getMail()).encode('utf-8')]
+        attrs['sn'] = [str(user.getLastname()).encode('utf-8')]
+        attrs['userpassword'] = [str(lsm.encrypt(user.getPassword())).encode('utf-8')]
+
+        oldValue = {'cn': [str(userOld.getFirstname()).encode('utf-8')]}
+        newValue = {'cn': [str(user.getFirstname()).encode('utf-8')]}
+        # Convert our dict to nice syntax for the add-function using modlist-module
+        ldif = modlist.modifyModlist(oldValue,newValue)
+        con.modify_s(dn,ldif)
+
+        oldValue = {'mail': [str(userOld.getMail()).encode('utf-8')]}
+        newValue = {'mail': [str(user.getMail()).encode('utf-8')]}
+        # Convert our dict to nice syntax for the add-function using modlist-module
+        ldif = modlist.modifyModlist(oldValue,newValue)
+        con.modify_s(dn,ldif)
+
+        oldValue = {'sn': [str(userOld.getLastname()).encode('utf-8')]}
+        newValue = {'sn': [str(user.getLastname()).encode('utf-8')]}
+        # Convert our dict to nice syntax for the add-function using modlist-module
+        ldif = modlist.modifyModlist(oldValue,newValue)
+        con.modify_s(dn,ldif)
+
+        if user.getPassword():
+            oldValue = {'userpassword': [str(userOld.getPassword()).encode('utf-8')]}
+            newValue = {'userpassword': [str(lsm.encrypt(user.getPassword())).encode('utf-8')]}
+            # Convert our dict to nice syntax for the add-function using modlist-module
+            ldif = modlist.modifyModlist(oldValue,newValue)
+            con.modify_s(dn,ldif)
+
+        # Do the actual synchronous add-operation to the ldapserver
+        #print('add_s')
+        #print(type(dn))
+        #print(type(ldif))
+
+        # Its nice to the server to disconnect and free resources when done
+        con.unbind_s()
+        check = True
+    except ldap.LDAPError:
+    #except Exception:
+        traceback.print_exc(file=sys.stdout)
+    return check
+
 def addUserToLdap(user):
     check = False
     try:
@@ -312,6 +412,52 @@ def changePassword(request,oldPassword,newPassword):
     #print(retValue)
     l.unbind_s()
     return retValue
+
+def getUser(uid):
+    l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+    searchScope = ldap.SCOPE_SUBTREE
+    retrieveAttributes = None
+    searchFilter = "(uid="+uid+")"
+    users=[]
+
+    try:
+            ldap_result_id = l.search(settings.AUTH_LDAP_BASE_USER_DN, searchScope, searchFilter, retrieveAttributes)
+            result_set = []
+            res = {}
+            while 1:
+                result_type, result_data = l.result(ldap_result_id, 0)
+                #print result_data
+                if (result_data == []):
+                    break
+                else:
+                    #print "check"
+                    if result_type == ldap.RES_SEARCH_ENTRY:
+                        for entry in result_data:
+                                try:
+                                    uid=entry[1]['uid'][0]
+                                except:
+                                    uid="ERROR"
+                                try:
+                                    cn=entry[1]['cn'][0]
+                                except:
+                                    cn="ERROR"
+                                try:
+                                    sn=entry[1]['sn'][0]
+                                except:
+                                    sn="ERROR"
+                                try:
+                                    mail=entry[1]['mail'][0]
+                                except:
+                                    mail="ERROR"
+                                user=LdapUser(encMsg(cn),encMsg(sn),encMsg(uid),encMsg(mail))
+                                #user.display()
+                                users.append(user)
+            l.unbind_s()
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+    if len(users) > 0:
+        return users.pop(0)
+    return None
 
 def getAllUsers():
     l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)

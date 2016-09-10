@@ -13,6 +13,12 @@ class AddUserForm(forms.Form):
     email = forms.CharField(label='Email')
     password = forms.CharField(label='Password',widget=forms.PasswordInput())
 
+class EditUserForm(forms.Form):
+    firstname = forms.CharField(label='Firstname')
+    lastname = forms.CharField(label='Lastname')
+    email = forms.CharField(label='Email')
+    password = forms.CharField(label='Password',widget=forms.PasswordInput())
+
 class AddGroupForm(forms.Form):
     groupname = forms.CharField(label='Groupname')
     description = forms.CharField(label='Description')
