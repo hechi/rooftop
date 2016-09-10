@@ -2,9 +2,10 @@
 {% load widget_tweaks %}
 {% block alerts %}
     {% if status %}
-    <div id="status" class="alert alert-success">Saved</div>
-    {% else %}
-    <div id="status" class="alert alert-danger">An error appeared</div>
+    <div id="status" class="alert alert-success">{{ status }}</div>
+    {% endif %}
+    {% if statusError %}
+    <div id="status" class="alert alert-danger">{{ statusError }}</div>
     {% endif %}
 {% endblock %}
 {% block header %}{{formtitle}}{% endblock %}

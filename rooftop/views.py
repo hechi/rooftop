@@ -26,7 +26,7 @@ import sys, traceback
 
 def custom_login(request, **kwargs):
     if request.user.is_authenticated():
-        return HttpResponseRedirect('start/')
+        return HttpResponseRedirect(reverse('start'))
     else:
         return login(request,**kwargs)
 
@@ -214,7 +214,10 @@ class EditUserView(View):
             password= form['password'].value()
             user = LdapUser(cn,sn,uid,mail,password)
             check=modUser(user)
-            param['status']=check
+            if check:
+                param['status']=check
+            else:
+                param['statusError']=check
 
         #return HttpResponse(json.dumps(check), content_type="application/json")
         return render(request, self.template_name, param)
