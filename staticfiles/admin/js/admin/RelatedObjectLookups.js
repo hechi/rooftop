@@ -120,7 +120,7 @@
         var selects = django.jQuery(selectsSelector);
         selects.find('option').each(function() {
             if (this.value === objId) {
-                this.innerHTML = newRepr;
+                this.textContent = newRepr;
                 this.value = newId;
             }
         });
@@ -176,6 +176,14 @@
             }
         });
         $('.related-widget-wrapper select').trigger('change');
+        $('.related-lookup').click(function(e) {
+            e.preventDefault();
+            var event = $.Event('django:lookup-related');
+            $(this).trigger(event);
+            if (!event.isDefaultPrevented()) {
+                showRelatedObjectLookupPopup(this);
+            }
+        });
     });
 
 })(django.jQuery);
