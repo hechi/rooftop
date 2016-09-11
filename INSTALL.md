@@ -9,9 +9,16 @@
 
 2. Configure rooftop
 
-  Important, change **AUTH_LDAP_\*** entries in **rooftop/rooftop/settings.py**.
+  Important, change **AUTH_LDAP_\*** entries in **rooftop/settings.py**.
   You can store the ldap passwort into settings.py or into a single file called
   *ldap_passwd.txt*
+
+  Generate secret key for django and save it into **secret_key.txt**
+  You can use this command
+  ```
+  </dev/urandom tr -dc '12345!@#$%qwertQWERTasdfgASDFGzxcvbZXCVB' | head -c8; echo "" > secret_key.txt
+  ```
+
 
 3. Build docker image
 
