@@ -1,5 +1,7 @@
 # rooftop
 
+Rooftop is a frontend for LDAP.
+
 ## Screenshots
 ### Loginscreen
 ![Loginscreen](screenshots/login.png?raw=true "Loginscreen")

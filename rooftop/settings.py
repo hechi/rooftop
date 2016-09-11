@@ -28,7 +28,7 @@ DEBUG = True
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS' : ['rooftop/templates'],
+        'DIRS' : [BASE_DIR+'/rooftop/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
