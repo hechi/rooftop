@@ -27,6 +27,9 @@ RUN cp /var/opt/rooftop/apache2_rooftop.conf /etc/apache2/sites-available/
 RUN cd /etc/apache2/sites-enabled &&  ln -s /etc/apache2/sites-available/apache2_rooftop.conf apache2_rooftop.conf
 RUN rm /etc/apache2/sites-enabled/000-default.conf
 
+#create random secret
+RUN cd /var/opt/rooftop && "< /dev/urandom tr -dc _A-Z-a-z-0-9 | head -c${1:-32};echo;" > secret_key.txt
+
 #install python libs and initial sqlite database
 RUN cd /var/opt/rooftop/ && pip3 install -r requirements.txt && python3 manage.py migrate
 
