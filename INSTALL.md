@@ -21,6 +21,12 @@
 
 4. Run docker image
 
+  docker runs in foreground
     ```
-    docker run -t -v <path to repository>/rooftop/rooftop:/var/opt/rooftop/rooftop/ -p 80:80 -i rooftop
+    docker run -v <path to repository>/rooftop/rooftop:/var/opt/rooftop/rooftop/ -p 80:80 -i rooftop
+    ```
+
+  docker runs in background
+    ```
+    docker run -d -v <path to repository>/rooftop/rooftop:/var/opt/rooftop/rooftop/ -p 80:80 -i rooftop
     ```
