@@ -358,6 +358,39 @@ def addGroupToLdap(groupname,description,username):
         traceback.print_exc(file=sys.stdout)
     return check
 
+@login_required
+def delUser(request):
+    check = False
+    if isUserInGroup(request.user.username,"admin"):
+        if 'modUsername' in request.POST:
+            uid=request.POST['modUsername']
+            groups = getGroupsOfUser(uid)
+            for g in groups:
+                modUserToGroup(uid,g,True)
+            check=delUserFromLdap(uid)
+    return HttpResponse(json.dumps(check), content_type="application/json")
+
+def delUserFromLdap(username):
+    check = False
+    try:
+        # Open a connection
+        l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+
+        # Bind/authenticate with a user with apropriate rights to add objects
+        l.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+
+         # The dn of our new entry/object
+        dn="uid="+username+","+str(settings.AUTH_LDAP_BASE_USER_DN)
+
+        l.delete_s(dn)
+
+        # Its nice to the server to disconnect and free resources when done
+        l.unbind_s()
+        check=True
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+    return check
+
 def isUserInGroup(username,groupname):
     l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
     searchScope = ldap.SCOPE_SUBTREE
@@ -560,6 +593,37 @@ def modGroup(request):
         if 'modGroupname' in request.POST and 'delUser' in request.POST:
             check=modUserToGroup(request.POST['delUser'],request.POST['modGroupname'],True)
     return HttpResponse(json.dumps(check), content_type="application/json")
+
+@login_required
+def delGroup(request):
+    check = False
+    if isUserInGroup(request.user.username,"admin"):
+        if 'modGroupname' in request.POST:
+            groupname=request.POST['modGroupname']
+            check=delGroupFromLdap(groupname)
+    return HttpResponse(json.dumps(check), content_type="application/json")
+
+def delGroupFromLdap(groupname):
+    check = False
+    try:
+        # Open a connection
+        l = ldap.initialize(settings.AUTH_LDAP_SERVER_URI)
+
+        # Bind/authenticate with a user with apropriate rights to add objects
+        l.simple_bind_s(settings.AUTH_LDAP_BIND_DN,str(settings.AUTH_LDAP_BIND_PASSWORD))
+
+         # The dn of our new entry/object
+        dn="cn="+groupname+","+str(settings.AUTH_LDAP_BASE_GROUP_DN)
+
+        l.delete_s(dn)
+
+        # Its nice to the server to disconnect and free resources when done
+        l.unbind_s()
+        check=True
+    except ldap.LDAPError:
+        traceback.print_exc(file=sys.stdout)
+        check=False
+    return check
 
 def modUserToGroup(username,groupname,removeFlag=False):
     check = False

@@ -60,10 +60,10 @@ function innlineEdit(orig,callback){
 
 function delUser(username,callback){
     param = {}
-    param['inputUsername']=username
+    param['modUsername']=username
     confirm("Delete user","Should i remove "+username+" from the system?",function(result){
         if(result){
-            sendPostQuery("delUser/",param,function(data){
+            sendPostQuery("/del/user/",param,function(data){
                 callback(data)
             });
         }
@@ -88,25 +88,24 @@ function delUserFromGroup(groupname,username,callback){
     });
 }
 
-function confirm(titleText,msg,callbackFunction) {
+function delGroup(groupname,callback){
+    console.log(groupname)
+    param = {}
+    param['modGroupname']=groupname
+    confirm("Delete group","Should i remove "+groupname+" group from the system?",function(result){
+        console.log(result)
+        if(result){
+            sendPostQuery("/del/group/",param,function(data){
+                callback(data);
+            })
+        }
+    });
+}
 
-    BootstrapDialog.confirm({
-            title: 'WARNING',
-            message: msg,
-            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
-            draggable: true, // <-- Default value is false
-            //btnCancelLabel: 'Do not delete', // <-- Default value is 'Cancel',
-            //btnOKLabel: 'delete', // <-- Default value is 'OK',
-            //btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
-            callback: function(result) {
-                // result will be true if button was click, while it will be false if users close the dialog directly.
-                if(result) {
-                    callbackFunction(true);
-                }else {
-                    callbackFunction(false);
-                }
-            }
-        });
+function confirm(titleText,msg,callbackFunction) {
+    BootstrapDialog.confirm(msg, function(result){
+           callbackFunction(result)
+       });
 };
 
 function sendPostQuery(query,param,callback,type){
@@ -154,6 +153,37 @@ $(document).ready(function () {
                 }
             }
         })
+
+        // REMOVE USER
+        delUserButton = $(idFor).find('.delUser');
+        delUserButton.click(function(){
+            delUser($(this).val(),function(result){
+                if(result){
+                    rmElem = $('div [data-for="' + dataFor + '"]');
+                    $(rmElem).slideToggle(400,function(){
+                        $(rmElem).parent().remove();
+                        $(idFor).slideToggle(400,function(){
+                            $(idFor).remove();
+                        });
+                    });
+                }
+            });
+        });
+        // REMOVE GROUP
+        delGroupButton = $(idFor).find('.delGroup');
+        delGroupButton.click(function(){
+            delGroup($(this).val(),function(result){
+                if(result){
+                    rmElem = $('div [data-for="' + dataFor + '"]');
+                    $(rmElem).slideToggle(400,function(){
+                        $(rmElem).parent().remove();
+                        $(idFor).slideToggle(400,function(){
+                            $(idFor).remove();
+                        });
+                    });
+                }
+            });
+        });
     });
 
     //$("#addUser").click(function(event){
@@ -206,7 +236,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.add-user-to-group').click(function(){
+    $('.addUserToGroup').click(function(){
         //var elem = $(this);
         var elem = $(this).parent().find('select');
         console.log(elem)
@@ -216,24 +246,26 @@ $(document).ready(function () {
         param['modGroupname']=groupName;
         param['addUser']=userName;
         sendPostQuery("/mod/group/",param,function(data){
-            elem.append($('<i class="glyphicon glyphicon-ok">'))
+            userElem=$('<li>')
+            userElem.text(userName)
+            userElem.append($('<i class="glyphicon glyphicon-ok">'))
+            list=elem.parent().find('ul')
+            list.append(userElem)
         });
     });
 
     $('.delGroupUser').click(function(){
-    var elem=$(this);
-    var groupname = $(elem).attr('groupid')
-    var username = $(elem).attr('delUser')
-    console.log("user: "+username)
-    console.log("groupname: "+groupname)
-    delUserFromGroup(groupname,username,function(result){
-        var loader = $(elem).parent().parent().parent().find('div').css("class","loader");
-        $(loader).removeClass("hidden");
-        $(loader).show();
-        if(result){
-            $(elem).parent().remove();
-            $(loader).hide();
-        }
+        var elem=$(this);
+        var groupname = $(elem).attr('groupid')
+        var username = $(elem).attr('delUser')
+        delUserFromGroup(groupname,username,function(result){
+            //var loader = $(elem).parent().parent().parent().find('div').css("class","loader");
+            //$(loader).removeClass("hidden");
+            //$(loader).show();
+            if(result){
+                $(elem).parent().remove();
+                //$(loader).hide();
+            }
     });
 });
 });

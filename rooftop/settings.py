@@ -108,6 +108,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'widget_tweaks',
+    'rooftop',
 )
 
 MIDDLEWARE_CLASSES = (

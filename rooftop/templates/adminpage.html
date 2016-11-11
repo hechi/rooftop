@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load customFilter %}
 {% load widget_tweaks %}
 {% block jumbotron_overwrite %}
 {% csrf_token %}
@@ -57,11 +58,11 @@
                 <div class="col-md-10">
                     <strong>{{g.cn}}</strong><br>
                 </div>
-                <div class="col-md-1 dropdown-info" data-for=".{{g.cn}}">
+                <div class="col-md-1 dropdown-info" data-for=".{{g.cn|replaceSpace:"_"}}">
                     <i class="fa fa-chevron-down"></i>
                 </div>
             </div>
-            <div class="row info hidden {{g.cn}}">
+            <div class="row info hidden {{g.cn|replaceSpace:"_"}}">
                 <div class="col-md-10 col-md-offset-1">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -98,7 +99,7 @@
                                                         <option value="{{u.user.getUid}}">{{u.user.getDisplayname}} ({{u.user.getUid}})</option>
                                                         {% endfor %}
                                                     </select>
-                                                    <div class="add-user-to-group btn btn-success">add</div>
+                                                    <div class="addUserToGroup btn btn-success">add</div>
                                                     <!--<div class="text-center loader hidden"><img src="/static/img/loader.gif" id="loader"/></div>-->
                                                 </td>
                                             </tr>
