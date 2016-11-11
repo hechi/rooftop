@@ -58,14 +58,55 @@ function innlineEdit(orig,callback){
     }
 }
 
+function delUser(username,callback){
+    param = {}
+    param['modUsername']=username
+    confirm("Delete user","Should i remove "+username+" from the system?",function(result){
+        if(result){
+            sendPostQuery("/del/user/",param,function(data){
+                callback(data)
+            });
+        }
+    });
+}
+
 function addUserToGroup(groupname,username,callback){
     param = {}
     param['modGroupname']=groupname;
     param['addUser']=username;
-    sendPostQuery("modGroup/",param,function(data){
+    sendPostQuery("/mod/group/",param,function(data){
         callback(data);
     });
 }
+
+function delUserFromGroup(groupname,username,callback){
+    param = {}
+    param['modGroupname']=groupname;
+    param['delUser']=username;
+    sendPostQuery("/mod/group/",param,function(data){
+        callback(data);
+    });
+}
+
+function delGroup(groupname,callback){
+    console.log(groupname)
+    param = {}
+    param['modGroupname']=groupname
+    confirm("Delete group","Should i remove "+groupname+" group from the system?",function(result){
+        console.log(result)
+        if(result){
+            sendPostQuery("/del/group/",param,function(data){
+                callback(data);
+            })
+        }
+    });
+}
+
+function confirm(titleText,msg,callbackFunction) {
+    BootstrapDialog.confirm(msg, function(result){
+           callbackFunction(result)
+       });
+};
 
 function sendPostQuery(query,param,callback,type){
     if (typeof type === "undefined" || type === null) {
@@ -112,6 +153,37 @@ $(document).ready(function () {
                 }
             }
         })
+
+        // REMOVE USER
+        delUserButton = $(idFor).find('.delUser');
+        delUserButton.click(function(){
+            delUser($(this).val(),function(result){
+                if(result){
+                    rmElem = $('div [data-for="' + dataFor + '"]');
+                    $(rmElem).slideToggle(400,function(){
+                        $(rmElem).parent().remove();
+                        $(idFor).slideToggle(400,function(){
+                            $(idFor).remove();
+                        });
+                    });
+                }
+            });
+        });
+        // REMOVE GROUP
+        delGroupButton = $(idFor).find('.delGroup');
+        delGroupButton.click(function(){
+            delGroup($(this).val(),function(result){
+                if(result){
+                    rmElem = $('div [data-for="' + dataFor + '"]');
+                    $(rmElem).slideToggle(400,function(){
+                        $(rmElem).parent().remove();
+                        $(idFor).slideToggle(400,function(){
+                            $(idFor).remove();
+                        });
+                    });
+                }
+            });
+        });
     });
 
     //$("#addUser").click(function(event){
@@ -164,7 +236,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.add-user-to-group').click(function(){
+    $('.addUserToGroup').click(function(){
         //var elem = $(this);
         var elem = $(this).parent().find('select');
         console.log(elem)
@@ -174,7 +246,26 @@ $(document).ready(function () {
         param['modGroupname']=groupName;
         param['addUser']=userName;
         sendPostQuery("/mod/group/",param,function(data){
-            elem.append($('<i class="glyphicon glyphicon-ok">'))
+            userElem=$('<li>')
+            userElem.text(userName)
+            userElem.append($('<i class="glyphicon glyphicon-ok">'))
+            list=elem.parent().find('ul')
+            list.append(userElem)
         });
     });
+
+    $('.delGroupUser').click(function(){
+        var elem=$(this);
+        var groupname = $(elem).attr('groupid')
+        var username = $(elem).attr('delUser')
+        delUserFromGroup(groupname,username,function(result){
+            //var loader = $(elem).parent().parent().parent().find('div').css("class","loader");
+            //$(loader).removeClass("hidden");
+            //$(loader).show();
+            if(result){
+                $(elem).parent().remove();
+                //$(loader).hide();
+            }
+    });
+});
 });
