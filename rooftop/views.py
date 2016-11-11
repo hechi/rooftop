@@ -150,7 +150,6 @@ class AddGroupView(View):
         return render(request, self.template_name, param)
 
     def post(self, request, *args, **kwargs):
-        #TODO check if user is in administration group
         form = self.form_class(request.POST)
         check=False
         param={}
@@ -197,7 +196,6 @@ class EditUserView(View):
             return HttpResponseRedirect(reverse('start'))
 
     def post(self, request, *args, **kwargs):
-        #TODO check if user is in administration group
         form = self.form_class(request.POST)
         check=False
         param={}
@@ -551,6 +549,7 @@ def getAllGroups():
 
 def modGroup(request):
     check = False
+    print(request)
     if isUserInGroup(request.user.username,settings.AUTH_LDAP_ADMIN_GROUP):
         if 'modGroupname' in request.POST and 'modDescription' in request.POST:
             groupname=request.POST['modGroupname']
@@ -597,16 +596,19 @@ def modUserToGroup(username,groupname,removeFlag=False):
                     if result_type == ldap.RES_SEARCH_ENTRY:
                         # add user to group
                         result_data[0][1]['member'].append(dn)
+                        #print(result_data)
                         result_set.append(result_data)
             members = []
             for r in result_set[0][0][1]['member']:
-                #print(str(r)+"!="+str(dn)+" FLAG:"+str(removeFlag))
+                print("r type:"+str(type(r)==bytes))
+                print("dn type:"+str(type(dn)==bytes))
+                if type(dn)!=bytes :
+                    dn=str(dn).encode('utf-8')
+                if type(r)!=bytes :
+                    r=str(r).encode('utf-8')
+                print(str(r)+" != "+str(dn)+" res: "+str(r!=dn)+" FLAG:"+str(removeFlag))
                 if r != dn or (removeFlag == False and r == dn):
-                    #print(type(r)==bytes)
-                    if(type(r)==bytes):
-                        members.append(r)
-                    else:
-                        members.append(str(r).encode('utf-8'))
+                    members.append(r)
             print(members)
             attr=[(ldap.MOD_REPLACE,'member',members)]
             l.modify_s('cn='+str(groupname)+","+str(baseDN),attr)

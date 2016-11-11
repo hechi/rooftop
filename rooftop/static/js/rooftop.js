@@ -62,10 +62,40 @@ function addUserToGroup(groupname,username,callback){
     param = {}
     param['modGroupname']=groupname;
     param['addUser']=username;
-    sendPostQuery("modGroup/",param,function(data){
+    sendPostQuery("/mod/group/",param,function(data){
         callback(data);
     });
 }
+
+function delUserFromGroup(groupname,username,callback){
+    param = {}
+    param['modGroupname']=groupname;
+    param['delUser']=username;
+    sendPostQuery("/mod/group/",param,function(data){
+        callback(data);
+    });
+}
+
+function confirm(titleText,msg,callbackFunction) {
+
+    BootstrapDialog.confirm({
+            title: 'WARNING',
+            message: msg,
+            type: BootstrapDialog.TYPE_WARNING, // <-- Default value is BootstrapDialog.TYPE_PRIMARY
+            draggable: true, // <-- Default value is false
+            //btnCancelLabel: 'Do not delete', // <-- Default value is 'Cancel',
+            //btnOKLabel: 'delete', // <-- Default value is 'OK',
+            //btnOKClass: 'btn-warning', // <-- If you didn't specify it, dialog type will be used,
+            callback: function(result) {
+                // result will be true if button was click, while it will be false if users close the dialog directly.
+                if(result) {
+                    callbackFunction(true);
+                }else {
+                    callbackFunction(false);
+                }
+            }
+        });
+};
 
 function sendPostQuery(query,param,callback,type){
     if (typeof type === "undefined" || type === null) {
@@ -177,4 +207,21 @@ $(document).ready(function () {
             elem.append($('<i class="glyphicon glyphicon-ok">'))
         });
     });
+
+    $('.delGroupUser').click(function(){
+    var elem=$(this);
+    var groupname = $(elem).attr('groupid')
+    var username = $(elem).attr('delUser')
+    console.log("user: "+username)
+    console.log("groupname: "+groupname)
+    delUserFromGroup(groupname,username,function(result){
+        var loader = $(elem).parent().parent().parent().find('div').css("class","loader");
+        $(loader).removeClass("hidden");
+        $(loader).show();
+        if(result){
+            $(elem).parent().remove();
+            $(loader).hide();
+        }
+    });
+});
 });
