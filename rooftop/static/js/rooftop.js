@@ -58,6 +58,18 @@ function innlineEdit(orig,callback){
     }
 }
 
+function delUser(username,callback){
+    param = {}
+    param['inputUsername']=username
+    confirm("Delete user","Should i remove "+username+" from the system?",function(result){
+        if(result){
+            sendPostQuery("delUser/",param,function(data){
+                callback(data)
+            });
+        }
+    });
+}
+
 function addUserToGroup(groupname,username,callback){
     param = {}
     param['modGroupname']=groupname;

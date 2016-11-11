@@ -600,8 +600,9 @@ def modUserToGroup(username,groupname,removeFlag=False):
                         result_set.append(result_data)
             members = []
             for r in result_set[0][0][1]['member']:
-                print("r type:"+str(type(r)==bytes))
-                print("dn type:"+str(type(dn)==bytes))
+                #print("r type:"+str(type(r)==bytes))
+                #print("dn type:"+str(type(dn)==bytes))
+                # check types of both
                 if type(dn)!=bytes :
                     dn=str(dn).encode('utf-8')
                 if type(r)!=bytes :
