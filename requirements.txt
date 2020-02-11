@@ -1,4 +1,4 @@
-Django==1.9.9
+Django==1.11.28
 django-auth-ldap==1.2.7
 django-widget-tweaks==1.4.1
 passlib==1.6.5
