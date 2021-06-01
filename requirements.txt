@@ -4,4 +4,4 @@ django-widget-tweaks==1.4.1
 passlib==1.6.5
 pyldap==2.4.21
 requests==2.10.0
-urllib3==1.16
+urllib3==1.26.5
